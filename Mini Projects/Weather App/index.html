@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Weather App</title>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="search-box">
+            <input id="city-input" type="text" placeholder="Enter city name" spellcheck="false">
+            <button id="search-btn"><img src="images/search.png" alt="Search Icon"></button>
+        </div>
+
+        <div class="weather">
+            <img id="weather-icon" src="images/rain.png" alt="Weather Icon" class="weather-icon">
+            <h1 id="temp" class="temp">33°C</h1>
+            <h2 id="city" class="city">Cumilla, Bangladesh</h2>
+
+
+            <div class="details">
+                <div class="col">
+                    <img src="images/humidity.png" alt="Humidity Icon">
+                    <div class="info">
+                        <div id="humidity" class="humidity">60%</div>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <img src="images/wind.png" alt="Wind Icon">
+                    <div class="info">
+                        <div id="wind" class="wind">10 km/h</div>
+                        <p>Wind Speed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
