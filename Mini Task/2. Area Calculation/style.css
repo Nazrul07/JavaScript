@@ -1,0 +1,102 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Inter, Segoe UI, Arial, sans-serif;
+    background: #f4f7fb;
+    margin: 0;
+    padding: 24px
+}
+
+.container {
+    max-width: 400px;
+    margin: 24px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(20, 30, 50, 0.08)
+}
+
+h1 {
+    margin: 0 0 12px;
+    font-size: 22px;
+    color: #0b2545
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    color: #334155
+}
+
+select,
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    font-size: 15px
+}
+
+.inputs .field {
+    display: flex;
+    gap: 8px
+}
+
+.inputs .field input {
+    flex: 1
+}
+
+.actions {
+    display: flex;
+    gap: 8px
+}
+
+button {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600
+}
+
+#calculate {
+    background: #2563eb;
+    color: #fff;
+    transition: all 0.3s ease
+}
+
+#calculate:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3)
+}
+
+#reset {
+    background: #eef2ff;
+    color: #1e293b;
+    transition: all 0.3s ease
+}
+
+#reset:hover {
+    background: #e0e7ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2)
+}
+
+.result {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #0f172a;
+    border: 1px solid #e6eef8
+}
+
+@media (max-width:420px) {
+    .container {
+        padding: 14px;
+    }
+}
