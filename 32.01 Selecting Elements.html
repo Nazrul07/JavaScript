@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DOM Selectors</title>
+</head>
+<body>
+
+  <h1 id="title">Hello World</h1>
+
+  <p class="item">Paragraph One</p>
+  <p class="item">Paragraph Two</p>
+  <p class="item active">Paragraph Three (active)</p>
+
+  <div>Just a div</div>
+  <div>Another div</div>
+
+  <script>
+    // 1. by ID — returns single element
+    const title = document.getElementById('title')
+    console.log('getElementById:', title)               // Output: <h1 id="title">Hello World</h1>
+
+    // 2. by class — returns ALL matches (HTMLCollection)
+    const items = document.getElementsByClassName('item')
+    console.log('getElementsByClassName:', items)       // Output: HTMLCollection(3) [p.item, p.item, p.item.active]
+
+    // 3. by tag — returns ALL matches (HTMLCollection)
+    const divs = document.getElementsByTagName('div')
+    console.log('getElementsByTagName:', divs)          // Output: HTMLCollection(2) [div, div]
+
+    // 4. querySelector — returns FIRST match only
+    const first = document.querySelector('.item')
+    console.log('querySelector first .item:', first)    // Output: <p class="item">Paragraph One</p>
+
+    // 5. querySelectorAll — returns ALL matches (NodeList)
+    const all = document.querySelectorAll('.item')
+    console.log('querySelectorAll all .item:', all)     // Output: NodeList(3) [p.item, p.item, p.item.active]
+  </script>
+
+</body>
+</html>

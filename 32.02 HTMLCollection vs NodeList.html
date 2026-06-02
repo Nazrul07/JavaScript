@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM Selection Demo</title>
+</head>
+<body>
+
+    <ul id="list">
+        <li class="item">Item 1</li>
+        <li class="item">Item 2</li>
+    </ul>
+
+    <script>
+        // 1. Initial Selection
+        const byClass = document.getElementsByClassName("item");    // LIVE HTMLCollection
+        const byQuery = document.querySelectorAll(".item");         // STATIC NodeList
+
+        console.log("--- INITIAL COUNT ---");
+        console.log("byClassName count:", byClass.length);          // 2
+        console.log("byQuerySelectorAll count:", byQuery.length);   // 2
+
+        // 2. Modify the DOM (Add a 3rd item dynamically)
+        const list = document.getElementById("list");
+        const newItem = document.createElement("li");
+        const newItem1 = document.createElement("li");
+        newItem.className = "item";
+        newItem.textContent = "Item 3 (Added Later)";
+        newItem1.className = "item";
+        newItem1.textContent = "Item 4 (Added Later)";
+
+        list.appendChild(newItem);
+        list.appendChild(newItem1);
+
+        console.log("\n--- AFTER ADDING two ITEMS ---");
+        console.log("byClassName count (LIVE):", byClass.length); // Updates to 4!
+        console.log("byQuerySelectorAll count (STATIC):", byQuery.length); // Stays 2!
+
+        // 3. Array Methods & Loop Demonstration
+        console.log("\n--- LOOPING DEMO ---");
+        
+        // NodeList has built-in forEach
+        console.log("Looping Static NodeList directly:");
+        byQuery.forEach(el => console.log("->", el.textContent));   // Works 
+        byQuery.forEach(el => el.style.color = "Green");            // Works
+
+        // HTMLCollection does NOT have forEach. We must convert it to an Array first.
+        console.log("Looping Live HTMLCollection via Array.from():");
+        const realArray = Array.from(byClass);
+        realArray.forEach(el => console.log("->", el.textContent)); // Works ✅
+    </script>
+</body>
+</html>

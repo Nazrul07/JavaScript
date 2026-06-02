@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scoped Query Selector Demo</title>
+</head>
+<body>
+
+    <!-- Target Container -->
+    <div id="container" style="border: 2px solid black; padding: 10px; margin-bottom: 10px;">
+        <h3>Inside Container</h3>
+        <p>This is the first paragraph inside container.</p>
+        <div class="item">Container Item A</div>
+        <div class="item">Container Item B</div>
+    </div>
+
+    <!-- Outside Container -->
+    <div id="outside" style="border: 2px solid red; padding: 10px;">
+        <h3>Outside Container</h3>
+        <p>This paragraph is outside.</p>
+        <div class="item">Outside Item C</div>
+    </div>
+
+    <script>
+        // 1. Grab the container element
+        const container = document.querySelector("#container");
+
+        // 2. Search ONLY inside the container
+        const items = container.querySelectorAll(".item");      // Output: 2 items (A and B), ignoring C. Cause container is pointing to the div with id "container"
+        const first = container.querySelector("p");
+
+        // 3. Print results to the console
+        console.log("--- SCOPED SEARCH RESULTS ---");
+        
+        // This will print 2, completely ignoring "Outside Item C"
+        console.log("Number of items found inside container:", items.length); 
+        
+        // This prints the text of the first item inside
+        console.log("First item found:", items[0].textContent); 
+
+        // This grabs the paragraph inside, completely ignoring the outside paragraph
+        console.log("Paragraph text found:", first.textContent); 
+    </script>
+</body>
+</html>
