@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Traversal Example</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+
+        .wrapper {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .active {
+            color: blue;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. THE HTML STRUCTURE -->
+    <div class="wrapper">
+        <div id="parent" class="container">
+            <ul id="menu">
+                <li class="item active">Home</li>
+                <li class="item">About</li>
+                <li class="item">Contact</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 2. THE JAVASCRIPT CODE -->
+    <script>
+        // Select the main reference element
+        const el = document.querySelector("#menu");
+
+        console.log("--- 1. WALKING UP (Parents) ---");
+        console.log("Parent Element:", el.parentElement);
+        console.log("Parent Node:", el.parentNode);
+        /* Difference between parentElement and parentNode
+
+        parentNode: returns any types of parent nodes. This includes regular elements, but it also includes the top-level document node.
+
+        parentElement: only returns parent if it is an actual HTML element(like <div>, <body>, etc.). If the parent is not an element (like the document node), it will return null.
+        */
+
+
+        console.log("Closest .wrapper Ancestor:", el.closest(".wrapper"));
+
+        console.log("--- 2. WALKING DOWN (Children) ---");
+        console.log("Child Elements Only:", el.children);
+        console.log("Total Child Elements:", el.children.length);
+        console.log("All Child Nodes (inc. spaces):", el.childNodes);
+        console.log("First Child Element:", el.firstElementChild);
+        console.log("Last Child Element:", el.lastElementChild);
+        console.log("First Child Node (whitespace):", el.firstChild);
+
+        console.log("--- 3. WALKING SIDEWAYS (Siblings) ---");
+        // Target the second list item ("About")
+        const aboutItem = el.children[1];
+        console.log("Target Item:", aboutItem.textContent);
+        console.log("Previous Sibling Element:", aboutItem.previousElementSibling);
+        console.log("Next Sibling Element:", aboutItem.nextElementSibling);
+        console.log("Previous Sibling Node:", aboutItem.previousSibling);
+
+        console.log("--- 4. CHECKING / COUNTING ---");
+        console.log("Has child nodes?:", el.hasChildNodes());   // Even though it looks empty, it has text nodes (whitespace) as children.
+        const homeItem = document.querySelector(".active");
+        console.log("Menu contains Home?:", el.contains(homeItem)); 
+    </script>
+
+</body>
+
+</html>

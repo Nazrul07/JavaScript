@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading & Modifying DOM Content</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+
+        .box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .hidden-text {
+            display: none;
+        }
+
+        .warning {
+            color: red;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========================================== -->
+    <!-- PART 1: READING & MODIFYING DEMO          -->
+    <!-- ========================================== -->
+    <div class="box">
+        <h3>Original Element</h3>
+        <p id="demo-para">
+            Hello <strong>World</strong>!
+            <span class="hidden-text">You can't see me on screen.</span>
+        </p>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PART 2: SECURITY (XSS) DEMO               -->
+    <!-- ========================================== -->
+    <div class="box">
+        <h3>XSS Security Test Zones</h3>
+        <p>This is what malicious user input looks like:</p>
+        <code>&lt;img src=x onerror="alert('Hacked!')"&gt;</code>
+
+        <hr>
+        <p class="warning">❌ Vulnerable Zone (Uses innerHTML):</p>
+        <div id="danger-zone">Original Danger Content</div>
+
+        <hr>
+        <p class="success">✅ Safe Zone (Uses textContent):</p>
+        <div id="safe-zone">Original Safe Content</div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT LOGIC                           -->
+    <!-- ========================================== -->
+    <script>
+        // ==========================================
+        // 1. READING CONTENT DIFFERENCES
+        // ==========================================
+        const el = document.querySelector("#demo-para");
+
+        console.log("--- 1. READING CONTENT ---");
+
+        // textContent: Gets raw text of EVERYTHING inside, ignoring HTML tags
+        console.log("textContent:", el.textContent.trim());
+        // Output includes: "Hello World! You can't see me on screen."
+
+        // innerText: Only gets visible text (respects CSS 'display: none')
+        console.log("innerText:", el.innerText.trim());
+        // Output only includes: "Hello World!"
+
+        // innerHTML: Gets the internal content WITH the HTML tags intact
+        console.log("innerHTML:", el.innerHTML.trim());
+        // Output: "Hello <strong>World</strong>! <span class=\"hidden-text\">..."
+
+        // outerHTML: Gets the element itself along with its internal content
+        console.log("outerHTML:", el.outerHTML.trim());
+        // Output: "<p id=\"demo-para\">Hello <strong>World</strong>! ...</p>"
+
+
+        // ==========================================
+        // 2. MODIFYING CONTENT DIFFERENCES
+        // ==========================================
+        console.log("\n--- 2. MODIFYING CONTENT ---");
+
+        // Let's create a temporary element to show how setting works
+        const testEl = document.createElement("div");
+
+        // Setting textContent treats string as plain text (escapes tags)
+        testEl.textContent = "<strong>Hello</strong>";
+        console.log("Setting textContent results in:", testEl.innerHTML);
+        // Renders literally on screen as: <strong>Hello</strong>
+
+        // Setting innerHTML parses the tags
+        testEl.innerHTML = "<strong>Hello</strong>";
+        console.log("Setting innerHTML results in:", testEl.innerHTML);
+        // Renders on screen as bold text: Hello
+
+
+        // ==========================================
+        // 3. XSS SECURITY ATTACK DEMO
+        // ==========================================
+        console.log("\n--- 3. SECURITY WARNING (XSS) ---");
+
+        // Simulated malicious user input (e.g., from a comment box or form)
+        // It tries to load a broken image 'x', which immediately triggers the 'onerror' JavaScript alert.
+        const userInput = '<img src=x onerror="console.log(\'💥 XSS Attack Executed via innerHTML!\'); alert(\'Hacked!\')">';
+
+        const dangerZone = document.querySelector("#danger-zone");
+        const safeZone = document.querySelector("#safe-zone");
+
+        // ❌ THE DANGEROUS WAY:
+        // This will parse the string, see the <img> tag, fail to load 'x', and run the malicious JavaScript!
+        console.log("Injecting into Vulnerable Zone...");
+        dangerZone.innerHTML = userInput;
+
+        // ✅ THE SAFE WAY:
+        // This strips all executable power. It renders the raw characters safely on screen without running anything.
+        console.log("Injecting into Safe Zone...");
+        safeZone.textContent = userInput;
+
+    </script>
+</body>
+
+</html>
