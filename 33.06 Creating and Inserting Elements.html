@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating and Inserting Elements</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+
+        .box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .newColor{
+            color: red;
+            font-weight: bold;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
+        }
+
+        .evenSpace {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h3>Creating and Inserting Elements</h3>
+        <p>This section demonstrates how to create new DOM elements and insert them into the document.</p>
+        <ul id="item-list">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+    </div>
+
+    <div class="box div newElements">
+        <h4>New Element will insert here.</h4>
+    </div>
+
+    <script>
+        // Create new elements
+        const div = document.createElement('div');
+        const anotherDiv = document.createElement('div');
+        const p = document.createElement('p');
+        const input = document.createElement('input');
+        const button = document.createElement('button');
+
+
+        // Inserting Elements and Appending
+        const parent = document.querySelector('.newElements');
+
+        div.classList.add('newParent');
+        div.classList.add('box');
+        div.innerHTML = '<strong>Appended Div: </strong>';
+        parent.append(div);
+
+        p.textContent = 'This will be added to the inserted div.'
+        const newParent = document.querySelector('.newParent');
+        newParent.append(p);
+
+        anotherDiv.classList.add('box');
+        anotherDiv.classList.add('evenSpace');
+        anotherDiv.innerHTML = '<p> Tell me something: </p>';
+        parent.append(anotherDiv);
+
+        input.type = 'text';
+        input.placeholder = 'Type something...';
+
+        button.textContent = 'Submit';
+        button.classList.add('newColor');
+
+        anotherDiv.append(input);
+        anotherDiv.append(button);
+
+    </script>
+</body>
+</html>

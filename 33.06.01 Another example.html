@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Manipulation Reference Sheet</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+
+        .box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .target {
+            background: #e0f7fa;
+            border: 2px dashed #00acc1;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .inserted {
+            background: #ffe0b2;
+            color: #e65100;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .legacy {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .adjacent {
+            background: #f3e5f5;
+            color: #4a148c;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: block;
+            margin: 5px 0;
+        }
+
+        .card {
+            background: #eceff1;
+            border: 1px solid #b0bec5;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ========================================== -->
+    <!-- SECTION 1: MODERN METHODS                  -->
+    <!-- ========================================== -->
+    <div class="box">
+        <h3>1. Modern Insertion (before, after, replaceWith)</h3>
+        <div id="reference-item" class="target">#reference-item (The Anchor)</div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECTION 2: OLD METHODS                     -->
+    <!-- ========================================== -->
+    <div class="box" id="legacy-parent">
+        <h3>2. Old Legacy Methods (appendChild, insertBefore, etc.)</h3>
+        <div id="old-child-1" class="target">Old Child 1</div>
+        <div id="old-child-2" class="target">Old Child 2 (To be Replaced)</div>
+        <div id="old-child-3" class="target">Old Child 3 (To be Removed)</div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECTION 3: INSERT ADJACENT HTML            -->
+    <!-- ========================================== -->
+    <div class="box">
+        <h3>3. insertAdjacentHTML Positions</h3>
+        <div id="adjacent-box" class="target" style="background: #fff9c4; border-color: #fbc02d;">
+            #adjacent-box Base Element
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECTION 4: REMOVING ELEMENTS               -->
+    <!-- ========================================== -->
+    <div class="box">
+        <h3>4. Removing Elements (.remove)</h3>
+        <div id="remove-me" class="target" style="background: #ffebee; border-color: #ef5350; color: #c62828;">
+            I will disappear completely when the script runs!
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECTION 5: CLONING ELEMENTS                -->
+    <!-- ========================================== -->
+    <div class="box" id="clone-container">
+        <h3>5. Cloning Elements (cloneNode)</h3>
+        <div class="card" id="original-card">
+            <strong>Original Card Title</strong>
+            <p>This is a nested child paragraph inside the card.</p>
+        </div>
+        <!-- Cloned elements will be appended here dynamically -->
+    </div>
+
+
+    <script>
+        console.log("=== DOM Manipulation Reference TESTS ===");
+
+        // ----------------------------------------------------
+        // MODULE 1: MODERN METHODS (before, after, replaceWith)
+        // ----------------------------------------------------
+
+        const ref = document.querySelector("#reference-item");
+        // Create elements to test insertions
+
+        const childBefore = document.createElement("span");
+        childBefore.className = "inserted";
+        childBefore.textContent = "Inserted Before";
+
+        const childAfter = document.createElement("span");
+        childAfter.className = "inserted";
+        childAfter.textContent = "Inserted After";
+
+        // Execute modern methods
+        ref.before(childBefore);
+        ref.after(childAfter);
+
+        // ReplaceWith
+        const replacement = document.createElement("div");
+        replacement.className = "inserted";
+        replacement.textContent = "I completely replaced the target!";
+        ref.replaceWith(replacement);
+
+
+        // ----------------------------------------------------
+        // MODULE 2: OLD LEGACY METHODS (appendChild, insertBefore, etc.)
+        // ----------------------------------------------------
+
+        const legacyParent = document.querySelector("#legacy-parent");
+        const refChild1 = document.querySelector("#old-child-1");
+        const refChild2 = document.querySelector("#old-child-2");
+        const refChild3 = document.querySelector("#old-child-3");
+
+        // appendChild: Add single element at the very end
+        const appChild = document.createElement("div");
+        appChild.className = "legacy";
+        appChild.textContent = "New Element added via appendChild()";
+        legacyParent.appendChild(appChild);
+
+        // insertBefore: Insert a fresh child right before a specific target element
+        const insBeforeChild = document.createElement("div");
+        insBeforeChild.className = "legacy";
+        insBeforeChild.textContent = "New Element inserted vai insertBefore()";
+        legacyParent.insertBefore(insBeforeChild, refChild2);       // insBeforeChild will be placed before refChild2
+
+        // replaceChild: Swap an old child out for a brand new child
+        const newReplaceChild = document.createElement("div");
+        newReplaceChild.className = "legacy";
+        newReplaceChild.textContent = "I replaced Old Child 2 using replaceChild()";
+        legacyParent.replaceChild(newReplaceChild, refChild2);      // refChild2 will be replaced by newReplaceChild
+
+
+        // Remove child: Remove a targeted child via its direct parent container
+        legacyParent.removeChild(refChild3);        // refChild3 will be removed from the DOM
+
+
+
+
+        // ----------------------------------------------------
+        // MODULE 3: insertAdjacentHTML & insertAdjacentElement
+        // ----------------------------------------------------
+        const adjBox = document.querySelector("#adjacent-box");
+
+        // Injecting HTML strings at all 4 available positions
+        adjBox.insertAdjacentHTML("beforebegin", "<span class='adjacent'>beforebegin: Outside, directly before.</span>");
+        adjBox.insertAdjacentHTML("afterbegin", "<span class='adjacent'>afterbegin: Inside, at the absolute start.</span>");
+        adjBox.insertAdjacentHTML("beforeend", "<span class='adjacent'>beforeend: Inside, at the absolute end</span>");
+        adjBox.insertAdjacentHTML("afterend", "<span class='adjacent'>afterend: Outside, directly after</span>");
+
+
+        // Testing insertAdjacentElement with a created Note object instead of string
+        const createdEl = document.createElement("span");
+        createdEl.className = "adjacent";
+        createdEl.style.color = "blue";
+        createdEl.textContent = "Inserted via insertAdjacentElement() at afterend";
+        adjBox.insertAdjacentElement("afterend", createdEl);
+
+
+        // ----------------------------------------------------
+        // MODULE 4: REMOVING ELEMENTS (Modern)        
+        // ----------------------------------------------------
+        const itemToRemove = document.querySelector("#remove-me");
+        const newItem = document.createElement("p");
+
+        newItem.className = "adjacent";
+        newItem.textContent = "This paragraph will be added and before removing the original item.";
+
+        itemToRemove.before(newItem);           // Insert newItem before itemToRemove for demonstration
+        // Directly deletes itselft from the web document layout without needing to reference its parent container
+        itemToRemove.remove();                  // itemToRemove will be removed from the DOM
+
+
+
+        // ----------------------------------------------------
+        // MODULE 5: CLONING ELEMENTS (cloneNode)
+        // ----------------------------------------------------
+        const originalCard = document.querySelector("#original-card");
+        const cloneContainer = document.querySelector("#clone-container");
+        
+        // shallowCopy(false): Clones just the wrapping outer div tag container, completely dropping clild text/p tags
+        const shallowCopy = originalCard.cloneNode(false);      // Copies only the outer div, not the inner content
+        shallowCopy.style.border = "2px dashed red";
+        shallowCopy.textContent = "Shallow Clone (No children)";
+        cloneContainer.append(shallowCopy);
+
+        // deepCopy(true): Clones the entire element along with all of its nested children and content
+        const deepCopy = originalCard.cloneNode(true);         // Copies the entire structure, including
+        deepCopy.style.border = "2px dashed green";
+
+
+        // deepCopy.testContent = "Deep Clone";    -> textContent on a parent element destorys all children and replaces everything with the pain text.
+        deepCopy.querySelector("strong").textContent = "Deep Clone Title";    // Modifying the cloned content to differentiate it   
+        cloneContainer.append(deepCopy);
+    </script>
+</body>
+
+</html>
