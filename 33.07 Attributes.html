@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Attribute Demo</title>
+</head>
+
+<body>
+    <!-- The element we'll manipulate -->
+    <input id="myInput" type="text" required disabled data-user-id="123" data-role="guest" class = "input-field another-class" value="Hello">
+
+    <script>
+        const el = document.querySelector("input");
+
+        // Use console to see the results of each operation on attributes
+
+        // 1. Get attribute
+        console.log("Original type:", el.getAttribute("type"));                 // "text"
+
+        // 2. Set attribute
+        el.setAttribute("type", "email");
+        console.log("After setting type to email:", el.getAttribute("type"));   // "email"
+
+        // 3. Remove attribute
+        el.removeAttribute("disabled");
+        console.log("Has 'disabled' now?", el.hasAttribute("disabled"));        // false
+
+        // 4. Check attribute
+        console.log("Has 'required'?", el.hasAttribute("required"));            // true
+
+        // 5. Direct property access (faster for standard attributes)
+        // Before changes
+        console.log("Original id:", el.id);                 // "myInput"
+        console.log("Original class:", el.className);       // "input-field another-class"
+        console.log("Input value:", el.value);              // "Hello"
+
+        // Change properties
+        el.id = "changedId";
+        el.className = "active";                        // replaces all classes
+        el.value = "test@example.com";
+
+        console.log("New id:", el.id);                  // "changedId"
+        console.log("New class:", el.className);        // "active"
+        console.log("Input value:", el.value);          // "test@example.com"
+
+        // 6. data-* attributes (camelCase via .dataset)
+        console.log("User ID:", el.dataset.userId);      // "123" 
+        /*
+            Note: -> In HTML, custom data attributes are kebab-case (data-user-id), but in JavaScript they become camelCase (userId)
+            If I used in HTML: data-userId = "123". It often become in HTML data.userid = "123",
+            then in JS it would become -> dataset.userid
+        */
+        console.log("Role:", el.dataset.role);           // "guest"
+
+        // Set a new data attribute
+        el.dataset.newProp = "val";
+        console.log("New data attribute:", el.dataset.newProp); // "val"
+        // This also creates: data-new-prop="val" in the HTML
+
+        // 7. Get ALL attributes
+        const allAttrs = [...el.attributes].map(arr => `${arr.name} = ${arr.value}`);
+        console.log("All attributes as strings:", allAttrs);
+        // Example output:
+        // [
+        //   "id = changedId",
+        //   "type = email",
+        //   "required = ",
+        //   "data-user-id = 123",
+        //   "data-role = guest",
+        //   "class = active",
+        //   "value = test@example.com",
+        //   "data-new-prop = val"
+        // ]
+    </script>
+</body>
+
+</html>

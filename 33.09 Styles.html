@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Style Manipulation Demo</title>
+
+    <style>
+        :root {
+            --main-color: purple;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            gap: 20px;
+        }
+
+        .box {
+            width: 250px;
+            height: 150px;
+            background: lightgray;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+
+            /* Using CSS variable */
+            border: 5px solid var(--main-color);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        button {
+            background-color: antiquewhite;
+            padding: 8px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+        }
+
+        button:hover{
+            border: 1px solid var(--main-color);
+        }
+
+        .log {
+            width: 350px;
+            height: 140px;
+            overflow-y: auto;
+            background: #222;
+            color: #0f0;
+            padding: 10px;
+            font-family: monospace;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+        Hello
+    </div>
+
+    <div class="controls">
+        <button onclick="changeTextColor()">Text Red</button>
+        <button onclick="changeBackground()">Blue BG</button>
+
+        <button onclick="changeFontSize()">Font 30px</button>
+        <button onclick="hideBox()">Hide</button>
+
+        <button onclick="showBox()">Show</button>
+        <button onclick="removeBg()">Remove BG Style</button>
+
+        <button onclick="readStyles()">Read Styles</button>
+        <button onclick="changeVariable()">CSS Variable</button>
+    </div>
+
+    <div class="log" id="log"></div>
+
+    <script>
+        const el = document.querySelector(".box");
+        const logEl = document.getElementById("log");
+
+        function log(message) {
+            const line = document.createElement("div");
+            line.textContent = "> " + message;
+
+            logEl.appendChild(line);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        // 1. Inline text color
+        function changeTextColor() {
+            el.style.color = "red";
+
+            log('el.style.color = "red"');
+        }
+
+        // 2. Inline background color
+        function changeBackground() {
+            el.style.backgroundColor = "blue";
+
+            log('el.style.backgroundColor = "blue"');
+        }
+
+        // 3. Font size
+        function changeFontSize() {
+            el.style.fontSize = "30px";
+
+            log('el.style.fontSize = "30px"');
+        }
+
+        // 4. Hide element
+        function hideBox() {
+            el.style.display = "none";
+
+            log('el.style.display = "none"');
+        }
+
+        // 5. Show element again
+        function showBox() {
+            el.style.display = "";
+
+            log('el.style.display = ""');
+        }
+
+        // 6. Remove only inline background style
+        function removeBg() {
+            el.style.backgroundColor = "";
+
+            log('el.style.backgroundColor = ""');
+        }
+
+        // 7. Read computed styles
+        function readStyles() {
+
+            /*
+                getComputedStyle()
+                returns FINAL styles after CSS + inline styles are applied
+            */
+
+            const computed = getComputedStyle(el);
+
+            log(`computed.color -> ${computed.color}`);
+            log(`computed.fontSize -> ${computed.fontSize}`);
+            log(`computed.display -> ${computed.display}`);
+
+            console.log(computed);
+
+            /*
+                computed is READ-ONLY
+
+                ❌ This will NOT work:
+                computed.color = "green";
+            */
+        }
+
+        // 8. CSS Variables
+        function changeVariable() {
+
+            /*
+                Set CSS variable
+            */
+            el.style.setProperty("--main-color", "orange");
+
+            /*
+                Read CSS variable
+            */
+            const value =
+                getComputedStyle(el)
+                    .getPropertyValue("--main-color");
+
+            log(`--main-color -> ${value}`);
+        }
+    </script>
+
+</body>
+
+</html>

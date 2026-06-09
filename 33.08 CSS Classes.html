@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Class Manipulation</title>
+    <style>
+        /* Base styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* The Target Element */
+        .box {
+            width: 300px;
+            height: 200px;
+            background-color: #e0e0e0;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #555;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* Class Definitions matching your code */
+        .active {
+            background-color: #4CAF50;
+            /* Green */
+            color: white;
+            border: 2px solid #2E7D32;
+        }
+
+        .hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+        }
+
+        .open {
+            transform: scale(1.1);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .visible {
+            opacity: 1;
+        }
+
+        .animated {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.10);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Controls styling */
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            max-width: 400px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            color: #333;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #f5f5f5;
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        .log-area {
+            font-family: monospace;
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            width: 330px;
+            height: 100px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- The Element we are manipulating -->
+    <div class="box" id="demoBox">
+        Hello
+    </div>
+
+    <!-- Controls to trigger the methods -->
+    <div class="controls">
+        <button onclick="addActive()">add("active")</button>
+        <button onclick="removeActive()">remove("active")</button>
+        <button onclick="addHidden()">add("hidden")</button>
+        <button onclick="removeHidden()">remove("hidden")</button>
+        <button onclick="toggleOpen()">toggle("open")</button>
+        <button onclick="forceToggle(true)">toggle("open", true)</button>
+        <button onclick="forceToggle(false)">toggle("open", false)</button>
+        <button onclick="checkContains()">contains("active")</button>
+        <button onclick="replaceClass()">replace("active", "open")</button>
+        <button onclick="multipleAdd()">add(multi)</button>
+        <button onclick="multipleRemove()">remove(multi)</button>
+        <button onclick="resetAll()" style="grid-column: span 2; background: #ffcccc; color: #c00;">Reset All</button>
+    </div>
+
+    <!-- Live Console Log simulation -->
+    <div class="log-area" id="log">
+        > Console output will appear here...
+    </div>
+
+    <script>
+        const el = document.querySelector("#demoBox");
+        const logEl = document.getElementById("log");
+
+        // Helper to log to the screen instead of console for visibility
+        function log(msg) {
+            const line = document.createElement("div");
+            line.textContent = `> ${msg}`;
+            logEl.appendChild(line);
+            logEl.scrollTop = logEl.scrollHeight;       // Auto-scroll to the bottom
+            console.log(msg);                           // Also log to real console
+
+            /*
+            ->If I wanted to add the new line at the top instead of the bottom, I could replace:
+                logEl.appendChild(line);                ->   logEl.prepend(line);
+                logEl.scrollTop = logEl.scrollHeight;   ->   logEl.scrollTop = 0;
+
+            
+            ->If I wanted to limit the number of log lines to, say, 7, I could add a check after appending:
+                if (logEl.children.length > 7) {
+                    logEl.removeChild(logEl.firstChild);
+                }
+                
+                - This way, when a new line is added and the total exceeds 7, the oldest line (the first child) is removed, keeping the log area clean and focused on recent actions.
+            */
+        }
+
+        // 1. add
+        function addActive() {
+            el.classList.add("active");
+            log('classList.add("active")');
+        }
+
+        function removeActive() {
+            el.classList.remove("active");
+            log('classList.remove("active")');
+        }
+
+        // 2. remove
+        function addHidden() {
+            el.classList.add("hidden");
+            log('classList.add("hidden")');
+        }
+
+        function removeHidden() {
+            el.classList.remove("hidden");
+            log('classList.remove("hidden")');
+        }
+
+        // 3. toggle (no args)
+        function toggleOpen() {
+            el.classList.toggle("open");        // toggle method will add the class if it's not present, or remove it if it is present.
+            log('classList.toggle("open")');
+        }
+
+        // 4. toggle (force add/remove)
+        function forceToggle(state) {
+            el.classList.toggle("open", state); // When the second argument is true, it will add the class if it's not already present.If present, it will do nothing. Vice versa if the second argument is false.
+            log(`classList.toggle("open", ${state})`);
+        }
+
+        // 5. contains
+        function checkContains() {
+            const isThere = el.classList.contains("active");
+            log(`classList.contains("active") -> ${isThere}`);
+            alert(`Is "active" present? ${isThere}`);
+        }
+
+        // 6. replace
+        function replaceClass() {
+            if (el.classList.contains("active")) {
+                el.classList.replace("active", "open");
+                log('classList.replace("active", "open")');
+            } else {
+                log('Skipped replace: "active" not found');
+            }
+        }
+
+        // 7. Multiple at once
+        function multipleAdd() {
+            el.classList.add("visible", "animated", "active");
+            log('classList.add("visible", "animated", "active")');
+        }
+
+        function multipleRemove() {
+            el.classList.remove("visible", "animated", "active");
+            log('classList.remove("visible", "animated", "active")');
+        }
+
+        // Reset helper
+        function resetAll() {
+            el.className = "box";
+            log('Reset: el.className = "box"');
+        }
+
+        // Initial state: set hidden to demonstrate removal
+        el.classList.add("hidden");
+        log('Initial state: Added "hidden" class');
+    </script>
+</body>
+
+</html>
