@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Password Change</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <h1 class="title">Login</h1>
+
+            <form id="authForm">
+                <!-- Username Input -->
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                    <span class="error-message" id="usernameError"></span>
+                </div>
+
+                <!-- Password Input -->
+                <div class="form-group">
+                    <label for="password" id="passwordLabel">Password</label>
+                    <input type="password" id="password" name="password" required>
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <!-- Change Password Checkbox -->
+                <div class="form-group checkbox-group">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="changePassword" name="changePassword">
+                        <label for="changePassword" class="checkbox-label">
+                            Check the box to change the password
+                        </label>
+                    </div>
+                </div>
+
+                <!-- New Password Fields (Hidden by default) -->
+                <div id="newPasswordSection" class="hidden">
+                    <div class="form-group">
+                        <label for="newPassword">Enter New Password</label>
+                        <input type="password" id="newPassword" name="newPassword">
+                        <span class="error-message" id="newPasswordError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="retypePassword">Retype New Password</label>
+                        <input type="password" id="retypePassword" name="retypePassword">
+                        <span class="error-message" id="retypePasswordError"></span>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn">Submit</button>
+
+                <!-- Success Message (Hidden by default) -->
+                <div class="success-message hidden" id="successMessage">
+                    Success! Welcome!
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

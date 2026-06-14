@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DocumentFragment Demo</title>
+
+    <style>
+
+        body{
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        ul{
+            height: 250px;
+            overflow: auto;
+            border: 2px solid #333;
+            padding: 10px;
+        }
+
+        button{
+            padding: 10px 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <button id="normalBtn">
+        Add 5000 Normally
+    </button>
+
+    <button id="fragmentBtn">
+        Add 5000 With Fragment
+    </button>
+
+    <ul id="list"></ul>
+
+    <script>
+
+        const ul =
+            document.querySelector("#list");
+
+        // ===================================
+        // NORMAL
+        // ===================================
+
+        document
+        .querySelector("#normalBtn")
+        .addEventListener("click", () => {
+
+            ul.innerHTML = "";      // Clear the list before adding new items
+
+            console.time("normal");
+
+            for(let i = 0; i < 5000; i++){
+
+                const li = document.createElement("li");
+
+                li.textContent = `Normal Item ${i}`;
+
+                ul.appendChild(li);
+            }
+
+            console.timeEnd("normal");
+        });
+
+        // ===================================
+        // FRAGMENT
+        // ===================================
+
+        document
+        .querySelector("#fragmentBtn")
+        .addEventListener("click", () => {
+
+            ul.innerHTML = "";
+
+            const fragment = document.createDocumentFragment();
+
+            console.time("fragment");
+
+            for(let i = 0; i < 5000; i++){
+
+                const li = document.createElement("li");
+
+                li.textContent = `Fragment Item ${i}`;
+
+                fragment.appendChild(li);
+            }
+
+            ul.appendChild(fragment);
+
+            console.timeEnd("fragment");
+        });
+
+    </script>
+
+</body>
+</html>
+
+
+<!-- Why we need to fragments?
+
+- When we add elements to the DOM, the browser needs to re-render the page to reflect the changes.
+This can be a costly operation, especially when adding a large number of elements.
+By using a DocumentFragment, we can create and manipulate a group of nodes without triggering re-rendering until we append the fragment to the DOM.
+This allows us to batch our updates and improve performance significantly. -->

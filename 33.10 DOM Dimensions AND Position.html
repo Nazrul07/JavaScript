@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Measurements Demo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f3f3;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .box {
+            width: 300px;
+            height: 180px;
+
+            padding: 20px;
+            border: 8px solid steelblue;
+
+            overflow: auto;
+
+            background: white;
+            border-radius: 10px;
+        }
+
+        .content {
+            width: 500px;
+            height: 500px;
+            background:
+                linear-gradient(to bottom, #ddd, #999);
+
+            padding: 10px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            max-width: 500px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        button:hover {
+            background: #ddd;
+            border: 1px solid #999;
+        }
+
+        .log {
+            width: 500px;
+            height: 220px;
+            overflow-y: auto;
+            background: #222;
+            color: #00ff88;
+            padding: 10px;
+            font-family: monospace;
+            border-radius: 10px;
+        }
+
+        .spacer {
+            height: 1000px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+    <div class="box">
+        <div class="content">
+            Large inner content
+            <br><br>
+            Scroll me to test scrollTop
+        </div>
+    </div>
+
+    <div class="controls">
+
+        <button onclick="showSize()">
+            Size Properties
+        </button>
+
+        <button onclick="showPosition()">
+            Position Properties
+        </button>
+
+        <button onclick="showScroll()">
+            Scroll Values
+        </button>
+
+        <button onclick="scrollWindowDown()">
+            window.scrollTo()
+        </button>
+
+        <button onclick="scrollBoxDown()">
+            box.scrollTop = 100
+        </button>
+
+        <button onclick="scrollIntoViewDemo()">
+            scrollIntoView()
+        </button>
+
+    </div>
+
+    <div class="log" id="log"></div>
+
+</div>
+
+<div class="spacer"></div>
+
+<div id="target"
+     style="
+        margin-top: 200px;
+        background: tomato;
+        color: white;
+        padding: 40px;
+        text-align: center;
+        font-size: 24px;
+     ">
+    TARGET ELEMENT
+</div>
+
+<script>
+
+    const el = document.querySelector(".box");
+    const logEl = document.getElementById("log");
+
+    function log(message) {
+
+        const line = document.createElement("div");
+
+        line.textContent = "> " + message;
+
+        logEl.appendChild(line);
+
+        logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    // =====================================================
+    // SIZE
+    // =====================================================
+
+    function showSize() {
+
+        log("---- SIZE ----");
+
+        /*
+            Includes:
+            content + padding + border
+        */
+        log("offsetWidth: " + el.offsetWidth);
+
+        /*
+            Includes:
+            content + padding
+            NOT border
+        */
+        log("clientWidth: " + el.clientWidth);
+
+        /*
+            Full scrollable content width
+        */
+        log("scrollWidth: " + el.scrollWidth);
+
+        log("offsetHeight: " + el.offsetHeight);
+
+        log("clientHeight: " + el.clientHeight);
+
+        /*
+            Total content height
+            including hidden overflow area
+        */
+        log("scrollHeight: " + el.scrollHeight);
+    }
+
+    // =====================================================
+    // POSITION
+    // =====================================================
+
+    function showPosition() {
+
+        log("---- POSITION ----");
+
+        /*
+            Distance relative to offsetParent
+        */
+        log("offsetTop: " + el.offsetTop);
+
+        log("offsetLeft: " + el.offsetLeft);
+
+        /*
+            Relative to VIEWPORT
+        */
+        const rect = el.getBoundingClientRect();    // returns { top, left, width, height }
+
+        log("rect.top: " + rect.top);             
+
+        log("rect.left: " + rect.left);
+
+        log("rect.width: " + rect.width);
+
+        log("rect.height: " + rect.height);
+    }
+
+    // =====================================================
+    // SCROLL VALUES
+    // =====================================================
+
+    function showScroll() {
+
+        log("---- SCROLL ----");
+
+        /*
+            Page scroll amount
+        */
+        log("window.scrollY: " + window.scrollY);   // Means - how much is scrolled from the top of the page
+
+        log("window.scrollX: " + window.scrollX);
+
+        /*
+            Element scroll amount
+        */
+        log("el.scrollTop: " + el.scrollTop);       // Means - how much is scrolled from the top of the element
+
+        log("el.scrollLeft: " + el.scrollLeft);
+    }
+
+    // =====================================================
+    // SCROLL METHODS
+    // =====================================================
+
+    function scrollWindowDown() {
+        /*
+            Scroll the page
+        */
+        window.scrollTo({
+            top: 300,               // - scroll to 300px from the top of the page
+            behavior: "smooth"
+        });
+
+        log('window.scrollTo({ top: 300, behavior: "smooth" })');
+    }
+
+    function scrollBoxDown() {
+
+        /*
+            Scroll INSIDE element
+        */
+        el.scrollTop = 100;             // - scroll to 100px from the top of the element
+
+        log("el.scrollTop = 100");
+    }
+
+    function scrollIntoViewDemo() {
+
+        const target = document.getElementById("target");
+
+        /*
+            Scroll until element becomes visible
+        */
+        target.scrollIntoView({         // scrollIntoView() - scrolls the page until the element is visible
+            behavior: "smooth"
+        });
+
+        log('target.scrollIntoView({ behavior: "smooth" })');
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms Demo</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input,
+        select,
+        button {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            /* 2 columns of equal width */
+            gap: 10px;
+        }
+
+        .log {
+            margin-top: 20px;
+            height: 220px;
+            overflow-y: auto;
+            background: #222;
+            color: #00ff88;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-bottom: 2px dotted #ccc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <form id="myForm">
+
+            <!-- TEXT INPUT -->
+
+            <input type="text" id="username" name="username" placeholder="Enter username" value="Nazrul Islam">
+
+            <!-- SELECT -->
+
+            <select id="country" name="country">
+
+                <option value="bd">
+                    Bangladesh
+                </option>
+
+                <option value="usa">
+                    USA
+                </option>
+
+                <option value="uk">
+                    UK
+                </option>
+
+            </select>
+
+            <!-- CHECKBOX -->
+
+            <label>
+
+                <input type="checkbox" id="agree" name="agree">
+
+                I Agree
+
+            </label>
+
+            <!-- RADIO -->
+
+            <div>
+
+                Gender:
+
+                <label>
+                    <input type="radio" name="gender" value="male" checked>
+                    Male
+                </label>
+
+                <label>
+                    <input type="radio" name="gender" value="female">
+                    Female
+                </label>
+
+            </div>
+
+        </form>
+
+        <hr>
+        <!-- CONTROLS -->
+
+        <div class="buttons">
+
+            <button onclick="readValues()">
+                Read Values
+            </button>
+
+            <button onclick="setValues()">
+                Set Values
+            </button>
+
+            <button onclick="showElements()">
+                form.elements
+            </button>
+
+            <button onclick="focusInput()">
+                focus()
+            </button>
+
+            <button onclick="blurInput()">
+                blur()
+            </button>
+
+            <button onclick="selectText()">
+                select()
+            </button>
+
+            <button onclick="resetForm()">
+                reset()
+            </button>
+
+            <button onclick="clearForm()">
+                clearForm()
+            </button>
+
+        </div>
+
+        <div class="log" id="log"></div>
+
+    </div>
+
+    <script>
+
+        // =========================================
+        // SELECT ELEMENTS
+        // =========================================
+
+        const form = document.querySelector("#myForm");
+
+        const input = document.querySelector("#username");
+
+        const select = document.querySelector("#country");
+
+        const checkbox = document.querySelector("#agree");
+
+        const logEl = document.querySelector("#log");
+
+        // =========================================
+        // LOGGER
+        // =========================================
+
+        function log(message) {
+
+            const line = document.createElement("div");
+
+            line.textContent = "> " + message;
+
+            logEl.appendChild(line);
+
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        // =========================================
+        // READ VALUES
+        // =========================================
+
+        function readValues() {
+
+            /*
+                Currently selected radio
+            */
+            const radio =
+                document.querySelector(
+                    "input[name='gender']:checked"      // selector for checked radio
+                );
+
+            log("---- VALUES ----");
+
+            /*
+                Text input value
+            */
+            log("input.value -> " + input.value);
+
+            /*
+                Selected option value
+            */
+            log("select.value -> " + select.value);
+
+            /*
+                true / false
+            */
+            log("checkbox.checked -> " + checkbox.checked);
+
+            /*
+                Optional chaining ?.
+                prevents error if nothing selected
+            */
+            log("radio?.value -> " + radio?.value);
+        }
+
+        // =========================================
+        // SET VALUES
+        // =========================================
+
+        function setValues() {
+
+            input.value = "Nazmul Islam";
+
+            select.value = "usa";
+
+            checkbox.checked = true;
+
+            /*
+                Select male radio
+            */
+            document.querySelector(
+                "input[value = 'male']"
+            ).checked = true;
+
+            log('Values changed');
+        }
+
+        // =========================================
+        // FORM ELEMENTS
+        // =========================================
+
+        function showElements() {
+
+            log("---- form.elements ----");
+
+            /*
+                Collection of ALL form controls
+            */
+            console.log(form.elements);
+            log(form.elements);
+
+            /*
+                Access by name attribute
+            */
+            log(
+                'form.elements["username"].value -> '
+                +
+                form.elements["username"].value
+            );
+
+            /*
+                Access by index
+            */
+            log(
+                "form.elements[0].name -> "
+                +
+                form.elements[0].name
+            );
+        }
+
+        // =========================================
+        // FORM METHODS
+        // =========================================
+
+        function focusInput() {
+
+            input.focus();
+
+            log("input.focus()");
+        }
+
+        function blurInput() {
+
+            input.blur();
+
+            log("input.blur()");
+        }
+
+        function selectText() {
+
+            /*
+                Selects ALL input text
+            */
+            input.select();
+
+            log("input.select()");
+        }
+
+        function resetForm() {
+
+            /*
+                Resets to ORIGINAL HTML defaults
+            */
+            form.reset();
+
+            log("form.reset()");
+        }
+
+        function clearForm() {
+            /*
+                Clear all values
+            */
+            input.value = "";
+            select.value = "bd";        // reset to first option
+
+            input.placeholder = "enter your name";
+            checkbox.checked = false;
+
+            /*
+                Clear radio selection
+            */
+            const radio = document.querySelector(
+                "input[type='radio']"
+            );
+
+            radio.checked = false;
+
+            log("form.clear()");
+        }
+
+    </script>
+
+</body>
+
+</html>
