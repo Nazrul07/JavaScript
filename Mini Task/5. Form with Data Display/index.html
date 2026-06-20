@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info Form</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="page-wrapper">
+
+        <header class="page-header">
+            <span class="brand">FormCheck</span>
+        </header>
+
+        <!-- Step indicator -->
+        <div class="steps">
+            <div class="step active">
+                <div class="step-circle">1</div>
+                <span class="step-label">Fill Details</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step">
+                <div class="step-circle">2</div>
+                <span class="step-label">View Summary</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Personal Information</h2>
+            <p class="card-subtitle">Fill in your details and click Submit</p>
+
+            <!--
+        JS TASK — index.html:
+        1. Listen for the form's "submit" event (prevent default)
+        2. Read each input value by their IDs
+        3. Validate: no field should be empty
+        4. Save the data to localStorage
+        5. Redirect to result.html
+      -->
+            <form id="info-form" novalidate>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" placeholder="John Doe" autocomplete="name">
+                        <span class="error-msg" id="name-error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="john@example.com" autocomplete="email">
+                        <span class="error-msg" id="email-error"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="+880 1XXX-XXXXXX" autocomplete="tel">
+                        <span class="error-msg" id="phone-error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" placeholder="22" min="1" max="120">
+                        <span class="error-msg" id="age-error"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender">
+                            <option value="">Select gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                            <option value="Prefer not to say">Prefer not to say</option>
+                        </select>
+                        <span class="error-msg" id="gender-error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" placeholder="Chittagong" autocomplete="address-level2">
+                        <span class="error-msg" id="city-error"></span>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn">
+                    <span>Submit</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

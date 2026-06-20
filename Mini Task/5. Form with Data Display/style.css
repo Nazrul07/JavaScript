@@ -1,0 +1,363 @@
+/* ============================================
+   style.css — shared styles for both pages
+   ============================================ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #EEF2FF;
+    --card-bg: #FFFFFF;
+    --accent: #4F46E5;
+    --accent-hover: #4338CA;
+    --accent-light: rgba(79, 70, 229, 0.08);
+    --text: #1E293B;
+    --label: #475569;
+    --muted: #94A3B8;
+    --border: #E2E8F0;
+    --input-bg: #F8FAFC;
+    --error: #EF4444;
+    --error-light: rgba(239, 68, 68, 0.08);
+    --success: #10B981;
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Page Layout ────────────────────────────── */
+
+.page-wrapper {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.brand {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--accent);
+}
+
+/* ─── Step Indicator ─────────────────────────── */
+
+.steps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 28px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 2px solid var(--border);
+    color: var(--muted);
+    background: var(--card-bg);
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.step.active .step-circle {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+.step.done .step-circle {
+    background: var(--success);
+    border-color: var(--success);
+    color: #fff;
+}
+
+.step-label {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.step.active .step-label {
+    color: var(--accent);
+}
+
+.step.done .step-label {
+    color: var(--success);
+}
+
+.step-line {
+    width: 72px;
+    height: 2px;
+    background: var(--border);
+    margin: 17px 10px 0;
+    /* 17px = half of 36px circle, to vertically center */
+}
+
+.step-line.filled {
+    background: var(--success);
+}
+
+/* ─── Card ───────────────────────────────────── */
+
+.card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Accent bar across the top of every card */
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent) 0%, #818CF8 100%);
+}
+
+.card-title {
+    font-size: 1.3125rem;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    margin-bottom: 4px;
+}
+
+.card-subtitle {
+    font-size: 0.875rem;
+    color: var(--label);
+    margin-bottom: 28px;
+}
+
+/* ─── Form ───────────────────────────────────── */
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--label);
+    letter-spacing: 0.01em;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--input-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+input::placeholder {
+    color: var(--muted);
+}
+
+input:focus,
+select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-light);
+    background: #fff;
+}
+
+/* Added by JS when validation fails */
+input.invalid,
+select.invalid {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px var(--error-light);
+}
+
+.error-msg {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--error);
+    min-height: 16px;
+}
+
+
+/* Custom dropdown arrow */
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+/* ─── Submit Button ───────────────────────────── */
+
+#submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 8px;
+    padding: 13px 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    /* Signature element: sheen slides across on hover */
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s, transform 0.1s;
+}
+
+#submit-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.15) 100%);
+    transform: translateX(-100%);
+    transition: transform 0.35s ease;
+}
+
+#submit-btn:hover {
+    background: var(--accent-hover);
+}
+
+#submit-btn:hover::before {
+    transform: translateX(0);
+}
+
+#submit-btn:active {
+    transform: scale(0.985);
+}
+
+/* ─── Result Page ─────────────────────────────── */
+
+.result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+.result-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 14px 16px;
+    background: var(--input-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+}
+
+.result-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+.result-value {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text);
+    word-break: break-word;
+}
+
+/* ─── Back Button ─────────────────────────────── */
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 24px;
+    background: transparent;
+    color: var(--label);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.back-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-light);
+}
+
+/* ─── Responsive ──────────────────────────────── */
+
+@media (max-width: 520px) {
+    .page-wrapper {
+        padding: 24px 16px 40px;
+    }
+
+    .card {
+        padding: 24px 18px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .result-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .step-line {
+        width: 40px;
+    }
+}

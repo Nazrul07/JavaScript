@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Info</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="page-wrapper">
+
+        <header class="page-header">
+            <span class="brand">FormCheck</span>
+        </header>
+
+        <!-- Step indicator — step 1 is done, step 2 is active -->
+        <div class="steps">
+            <div class="step done">
+                <div class="step-circle">&#10003;</div>
+                <span class="step-label">Fill Details</span>
+            </div>
+            <div class="step-line filled"></div>
+            <div class="step active">
+                <div class="step-circle">2</div>
+                <span class="step-label">View Summary</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Your Information</h2>
+            <p class="card-subtitle">Here's what you submitted</p>
+
+            <!--
+        JS TASK — result.html:
+        1. On page load (DOMContentLoaded), read the data from localStorage
+        2. If no data found, redirect back to index.html
+        3. Set the textContent of each result span using the IDs below
+      -->
+            <div class="result-grid">
+
+                <div class="result-item">
+                    <span class="result-label">Full Name</span>
+                    <span class="result-value" id="result-name">—</span>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Email Address</span>
+                    <span class="result-value" id="result-email">—</span>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Phone Number</span>
+                    <span class="result-value" id="result-phone">—</span>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Age</span>
+                    <span class="result-value" id="result-age">—</span>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Gender</span>
+                    <span class="result-value" id="result-gender">—</span>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">City</span>
+                    <span class="result-value" id="result-city">—</span>
+                </div>
+
+            </div>
+
+            <!-- JS: clicking this should go back to index.html -->
+            <button id="back-btn" class="back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12" />
+                    <polyline points="12 19 5 12 12 5" />
+                </svg>
+                <span>Go Back</span>
+            </button>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
