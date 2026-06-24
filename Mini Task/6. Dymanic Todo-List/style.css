@@ -1,0 +1,206 @@
+/* =====================
+   Reset & Base
+===================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #010617;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 16px;
+}
+
+
+/* =====================
+   App Container
+===================== */
+
+.app {
+    width: 100%;
+    max-width: 520px;
+}
+
+
+/* =====================
+   Header
+===================== */
+
+header {
+    margin-bottom: 28px;
+}
+
+header h1 {
+    font-size: 2rem;                    /* 32px */
+    font-weight: 700;                   /* bold */
+    letter-spacing: -0.5px;             /* tighter spacing for a more polished look */
+    color: #f8fafc;
+}
+
+header .subtitle {
+    margin-top: 4px;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+
+/* =====================
+   Input Row
+===================== */
+
+.input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+#todoInput {
+    flex: 1;                /* take up remaining space */
+    padding: 12px 16px;
+    background: #1e2130;
+    border: 1px solid #2d3248;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+#todoInput::placeholder {
+    color: #4a5568;
+}
+
+#todoInput:focus {
+    border-color: #4f9cf9;
+}
+
+#addBtn {
+    padding: 12px 22px;
+    background: #4f9cf9;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+#addBtn:hover {
+    background: #3b82f6;
+}
+
+#addBtn:active {
+    transform: scale(0.97);
+}
+
+
+/* =====================
+   Todo List
+===================== */
+
+#todoList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+/* =====================
+   Todo Item
+===================== */
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    background: #1e2130;
+    border: 1px solid #2d3248;
+    border-radius: 8px;
+
+    /* Slide-in animation when added */
+    animation: slideIn 0.25s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* The task text */
+
+.todo-item span {
+    flex: 1;
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: color 0.2s;
+    user-select: none;
+    /* prevent text selection on click */
+}
+
+.todo-item span:hover {
+    color: #f1f5f9;
+}
+
+/* Done state — applied by JS via classList.toggle */
+
+.todo-item span.done {
+    text-decoration: line-through;      /*line-through -> mark as completed */
+    color: #4a5568;
+}
+
+
+/* =====================
+   Delete Button
+===================== */
+
+.delete-btn {
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid #3d2f2f;
+    border-radius: 6px;
+    color: #f87171;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+    /* don't shrink when task text is long */
+}
+
+.delete-btn:hover {
+    background: #2d1f1f;
+    border-color: #f87171;
+}
+
+
+/* =====================
+   Empty Message
+===================== */
+
+#emptyMsg {
+    text-align: center;
+    color: #4a5568;
+    font-size: 0.875rem;
+    margin-top: 32px;
+    display: none;
+    /* shown/hidden by JS */
+}

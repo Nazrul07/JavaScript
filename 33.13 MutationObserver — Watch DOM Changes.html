@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MutationObserver Demo</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 30px;
+        }
+
+        #container {
+            border: 2px solid steelblue;
+            padding: 20px;
+            min-height: 120px;
+            margin-bottom: 20px;
+        }
+
+        .box {
+            background: skyblue;
+            padding: 10px;
+            margin: 5px 0;
+        }
+
+        .highlight {
+            background: orange;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 15px;
+        }
+
+        #log {
+            background: #111;
+            color: #0f0;
+            padding: 10px;
+            height: 250px;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h2>MutationObserver Example</h2>
+
+    <div id="container">
+
+        <div class="box">
+            Hello World
+        </div>
+
+    </div>
+
+    <button id="add">Add Element</button>
+
+    <button id="remove">Remove Last Element</button>
+
+    <button id="changeClass">Toggle Class</button>
+
+    <button id="changeText">Change Text</button>
+
+    <button id="stop">Stop Observer</button>
+
+    <h3>Observer Log</h3>
+
+    <div id="log"></div>
+
+    <script>
+
+        const container = document.querySelector("#container");
+        const log = document.querySelector("#log");
+
+
+        // helper function
+        function print(message) {
+            log.innerHTML += message + "<br>";
+            log.scrollTop = log.scrollHeight;
+        }
+
+
+        // ---------------- MutationObserver ----------------
+
+        const observer = new MutationObserver((mutations) => {
+
+            mutations.forEach((mutation) => {
+
+                print("----------------------------------");
+
+                print("Mutation Type : " + mutation.type);
+
+                if (mutation.type === "childList") {
+
+                    print("Added Nodes : " + mutation.addedNodes.length);
+
+                    print("Removed Nodes : " + mutation.removedNodes.length);
+
+                }
+
+                if (mutation.type === "attributes") {
+
+                    print("Changed Attribute : " + mutation.attributeName);
+
+                }
+
+                if (mutation.type === "characterData") {
+
+                    print("Text was modified.");
+
+                }
+
+            });
+
+        });
+
+
+        observer.observe(container, {
+
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ["class", "style"],
+            characterData: true
+
+        });
+
+
+        // ---------------- Buttons ----------------
+
+
+        // Add new element
+
+        document.querySelector("#add").addEventListener("click", () => {
+
+            const div = document.createElement("div");
+
+            div.className = "box";
+
+            div.textContent = "New Box " + Math.floor(Math.random() * 100);
+
+            container.appendChild(div);
+
+        });
+
+
+        // Remove last element
+
+        document.querySelector("#remove").addEventListener("click", () => {
+
+            if (container.lastElementChild) {
+
+                container.removeChild(container.lastElementChild);
+
+            }
+
+        });
+
+
+        // Change class
+
+        document.querySelector("#changeClass").addEventListener("click", () => {
+
+            const first = document.querySelector(".box");
+
+            first.classList.toggle("highlight");
+
+        });
+
+
+        // Change text
+
+        document.querySelector("#changeText").addEventListener("click", () => {
+
+            const first = document.querySelector(".box");
+
+            first.firstChild.textContent = "Text Changed at "
+                + new Date().toLocaleTimeString();
+
+        });
+
+
+        // Disconnect observer
+
+        document.querySelector("#stop").addEventListener("click", () => {
+
+            observer.disconnect();
+
+            print("Observer Disconnected.");
+
+        });
+
+    </script>
+
+</body>
+
+</html>
