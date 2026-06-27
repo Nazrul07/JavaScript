@@ -1,0 +1,180 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #0f1117;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 16px;
+}
+
+.app {
+    width: 100%;
+    max-width: 480px;
+}
+
+
+header {
+    margin-bottom: 28px;
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #f8fafc;
+}
+
+header .subtitle {
+    margin-top: 6px;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+
+
+/* Input Groups */
+
+.input-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.4fr;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.field input {
+    width: 100%;
+    padding: 13px 14px;
+    background: #1e2130;
+    border: 1px solid #2d3248;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+
+    /* Remove browser default spinner arrows */
+    appearance: textfield;
+}
+
+.field input::-webkit-outer-spin-button,
+.field input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.field input::placeholder {
+    color: #4a5568;
+}
+
+.field input:focus {
+    border-color: #4f9cf9;
+}
+
+.field input.invalid {
+    border-color: #f87171;
+}
+
+
+
+#error {
+    min-height: 20px;
+    font-size: 0.825rem;
+    color: #f87171;
+    margin-bottom: 16px;
+}
+
+
+
+#calcBtn {
+    width: 100%;
+    padding: 13px;
+    background: #4f9cf9;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-bottom: 28px;
+}
+
+#calcBtn:hover {
+    background: #3b82f6;
+}
+
+#calcBtn:active {
+    transform: scale(0.98);
+}
+
+
+
+#result {
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    animation: fadeUp 0.3s ease;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-card {
+    background: #1e2130;
+    border: 1px solid #2d3248;
+    border-radius: 10px;
+    padding: 24px 16px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.result-card span {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #4f9cf9;
+    line-height: 1;
+}
+
+
+.result-card label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+}

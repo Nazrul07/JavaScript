@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Search</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>Language Search</h1>
+            <p class="subtitle">Type to filter the list below</p>
+        </header>
+
+        <div class="search-wrapper">
+            <span class="icon">&#128269;</span>
+            <input id="search" type="text" placeholder="Search languages..." autocomplete="off">
+        </div>
+
+        <p id="resultCount"></p>
+
+        <ul id="list">
+            <li>JavaScript</li>
+            <li>Python</li>
+            <li>Java</li>
+            <li>C++</li>
+            <li>TypeScript</li>
+            <li>Go</li>
+            <li>Rust</li>
+            <li>Kotlin</li>
+            <li>Swift</li>
+            <li>PHP</li>
+            <li>Ruby</li>
+            <li>Dart</li>
+        </ul>
+
+        <p id="noResult">No languages found.</p>
+
+    </div>
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
