@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>Create Account</h1>
+            <p class="subtitle">Fill in your details to register</p>
+        </header>
+
+        <!-- Success message — hidden until valid submit -->
+        <div id="successMsg">
+            <span>&#10003;</span> Account created successfully!     <!-- &#10003; is a checkmark -->
+        </div>
+
+        <form id="registerForm" novalidate>
+            <!--
+                novalidate — disables browser's built-in validation bubbles
+                so our custom validation fully takes over
+            -->
+
+            <!-- Username field -->
+            <div class="field-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="e.g. nazrul123" autocomplete="off">
+                <span class="error" id="usernameError"></span>
+            </div>
+
+            <!-- Password field -->
+            <div class="field-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Min. 8 characters">
+                <!-- Strength bar — fills up as password gets stronger -->
+                <div class="strength-bar">
+                    <div id="strengthFill"></div>
+                </div>
+                <span class="hint" id="strengthLabel"></span>
+                <span class="error" id="passwordError"></span>
+            </div>
+
+            <button type="submit">Register</button>
+
+        </form>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
