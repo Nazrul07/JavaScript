@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabs Component</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>Tabs Component</h1>
+            <p class="subtitle">Click a tab to switch content</p>
+        </header>
+
+        <div class="card">
+
+            <!-- Tab buttons -->
+            <!-- data-target links each button to a panel by ID -->
+            <div class="tabs">
+                <button class="tab active" data-target="tab1">Profile</button>
+                <button class="tab" data-target="tab2">Projects</button>
+                <button class="tab" data-target="tab3">Settings</button>
+            </div>
+
+            <!-- Tab panels -->
+            <!-- Only tab1 is visible on load, rest have class "hidden" -->
+            <div id="tab1" class="panel">
+                <p><strong>Name:</strong>  Nazrul Islam</p>
+                <p><strong>Role:</strong>    Software Engineer</p>
+                <p><strong>Skill:</strong>    C/C++, Python, JavaScript.</p>
+            </div>
+
+            <div id="tab2" class="panel hidden">
+                <h2>Projects</h2>
+                <p>Todo List App</p>
+                <p>Age Calculator</p>
+                <p>Live Search Filter</p>
+            </div>
+
+            <div id="tab3" class="panel hidden">
+                <h2>Settings</h2>
+                <p>Theme: Dark</p>
+                <p>Language: English</p>
+                <p>Notifications: Enabled</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

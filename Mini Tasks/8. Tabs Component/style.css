@@ -1,0 +1,162 @@
+/* =====================
+   Reset & Base
+===================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #0f1117;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 16px;
+}
+
+
+/* =====================
+   App Container
+===================== */
+
+.app {
+    width: 100%;
+    max-width: 520px;
+}
+
+
+/* =====================
+   Header
+===================== */
+
+header {
+    margin-bottom: 28px;
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #f8fafc;
+}
+
+header .subtitle {
+    margin-top: 4px;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+
+/* =====================
+   Card Wrapper
+===================== */
+
+.card {
+    background: #1e2130;
+    border: 1px solid #2d3248;
+    border-radius: 12px;
+    overflow: hidden;
+    /* keeps tab strip corners clipped to card */
+}
+
+
+/* =====================
+   Tab Buttons Strip
+===================== */
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #2d3248;
+}
+
+.tab {
+    flex: 1;
+    /* all tabs share equal width */
+    padding: 14px 0;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.tab:hover:not(.active) {
+    color: #94a3b8;
+    background: #252a3a;
+}
+
+/* Active tab — blue text + bottom border indicator */
+.tab.active {
+    color: #4f9cf9;
+    font-weight: 600;
+}
+
+/* The blue underline on the active tab */
+.tab.active::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    /* sits on top of the card's border-bottom */
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #4f9cf9;
+}
+
+
+/* =====================
+   Panels
+===================== */
+
+.panel {
+    padding: 28px 24px;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* hidden class — added/removed by JS */
+.hidden {
+    display: none;
+}
+
+/* Panel heading */
+.panel h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #2d3248;
+}
+
+/* Panel rows */
+.panel p {
+    white-space: pre;       /*will show exactly how it typed.*/
+    font-size: 0.875rem;
+    color: #94a3b8;
+    padding: 8px 0;
+    border-bottom: 1px solid #1a1f2e;
+}
+
+.panel p:last-child {
+    border-bottom: none;
+}

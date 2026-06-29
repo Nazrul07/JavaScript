@@ -1,0 +1,178 @@
+/* =====================
+   Reset & Base
+===================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0f1117;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+}
+
+
+/* =====================
+   Header
+===================== */
+
+header {
+    position: sticky;
+    /* sticks to top while scrolling */
+    top: 0;
+    background: #0f1117;
+    border-bottom: 1px solid #1e2130;
+    padding: 16px 24px;
+    z-index: 10;
+}
+
+header h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f8fafc;
+}
+
+header .subtitle {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+
+/* =====================
+   Container
+===================== */
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+
+/* =====================
+   List Items
+===================== */
+
+#list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* Each item card */
+.item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #1e2130;
+    border: 1px solid #2d3248;
+    border-radius: 8px;
+
+    /* Slide-in animation when item is added */
+    animation: fadeUp 2s ease;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Number badge on each item */
+.item-number {
+    width: 36px;
+    height: 36px;
+    background: #1a2d45;
+    border: 1px solid #2d4a6e;
+    border-radius: 8px;
+    color: #4f9cf9;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.item-text {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+}
+
+.item-sub {
+    font-size: 0.75rem;
+    color: #4a5568;
+    margin-top: 2px;
+}
+
+
+/* =====================
+   Loader
+===================== */
+
+#loader {
+    display: none;
+    /* hidden by default, shown by JS */
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 28px 0;
+    color: #4a5568;
+    font-size: 0.825rem;
+}
+
+/* CSS-only spinning circle */
+.spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid #2d3248;
+    border-top-color: #4f9cf9;
+    /* one side is blue — creates spin effect */
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =====================
+   End Message
+===================== */
+
+#endMsg {
+    display: none;
+    /* shown by JS when all items loaded */
+    text-align: center;
+    color: #4a5568;
+    font-size: 0.825rem;
+    padding: 28px 0;
+    border-top: 1px solid #1e2130;
+    margin-top: 10px;
+}
+
+
+/* =====================
+   Sentinel
+===================== */
+
+#sentinel {
+    height: 1px;
+    /* invisible — just a position marker */
+}
