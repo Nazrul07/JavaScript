@@ -1,0 +1,256 @@
+<!--
+We usually use only - element.addEventListener("click", handler);
+
+but third (options object) parameter is also available. And it is very important to understand.
+-->
+
+
+<!--
+| Option          | Purpose                                              | Real-life Example                      |
+| --------------- | ---------------------------------------------------- | -------------------------------------- |
+| `capture:true`  | Event runs during capturing phase                    | Parent intercepts clicks before child  |
+| `capture:false` | Normal bubbling (default)                            | Most click handlers                    |
+| `once:true`     | Automatically removes listener after first execution | Welcome popup, first login, onboarding |
+| `passive:true`  | Promises not to call `preventDefault()`              | Scroll, touch, wheel events            |
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>addEventListener Options Demo</title>
+
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-family: Arial;
+            margin: 30px;
+        }
+
+        .container {
+            width: 300px;
+            padding: 40px;
+            background: #dbeafe;
+            border: 3px solid steelblue;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        .scroll-box {
+            width: 300px;
+            margin-top: 40px;
+            padding: 5px;
+            height: 200px;
+            overflow: auto;
+            border: 2px solid gray;
+        }
+
+        .big-content {
+            height: 1000px;
+            background: linear-gradient(rgb(245, 215, 215), rgb(136, 232, 136));
+        }
+
+        #log {
+            width: 300px;
+            margin-top: 20px;
+            background: #222;
+            color: #0f0;
+            padding: 15px;
+            height: 220px;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>addEventListener Options Demo</h2>
+
+    <div class="container" id="parent">
+
+        Parent Div
+
+        <br><br>
+
+        <button id="btn">
+            Click Me
+        </button>
+
+    </div>
+
+    <div class="scroll-box">
+
+        <div class="big-content">
+            Scroll inside me...
+        </div>
+
+    </div>
+
+    <h3>Console</h3>
+
+    <div id="log"></div>
+
+    <script>
+
+        const log = document.querySelector("#log");
+
+        function print(msg) {
+
+            log.innerHTML += msg + "<br>";
+
+            log.scrollTop = log.scrollHeight;
+
+        }
+
+        //---------------------------------------------------
+        // CAPTURE
+        //---------------------------------------------------
+
+        document.querySelector("#parent").addEventListener("click", () => {
+
+            print("Parent Click");
+
+        }, {
+            capture: true
+        });
+
+        document.querySelector("#btn").addEventListener("click", () => {
+
+            print("Button Click");
+
+        }, {
+            capture: false
+        });
+
+
+        //---------------------------------------------------
+        // ONCE
+        //---------------------------------------------------
+
+        document.querySelector("#btn").addEventListener("click", () => {
+
+            print("⭐ I only run once!");
+
+        }, {
+            once: true
+        });
+
+
+        //---------------------------------------------------
+        // PASSIVE
+        //---------------------------------------------------
+
+        document.querySelector(".scroll-box").addEventListener("scroll", () => {
+
+            print("Scrolling...");
+
+        }, {
+            passive: true
+        });
+
+    </script>
+
+</body>
+
+</html>
+
+
+<!--
+If I write, window.addEventListener("scroll", onScroll);
+then the browser will wait for the onScroll function to finish before it can scroll the page.
+This can cause jank and make the scrolling feel sluggish.
+
+When the user scrolls, the browser doesn't know:
+"Will this JavaScript call preventDefault()?"
+
+
+So internally it does something like this:
+User scrolls mouse
+
+        ↓
+
+Wait...
+
+        ↓
+
+Run JavaScript
+
+        ↓
+
+Did JS call preventDefault()?
+
+        ↓
+
+No?
+
+        ↓
+
+Okay, now scroll.
+That waiting happens every scroll event.
+
+
+
+With passive: true
+I'm making a promise.
+
+Dear Browser,
+
+I promise I will NEVER call
+
+preventDefault()
+
+inside this event.
+
+
+Now the browser doesn't have to wait.
+User scrolls
+
+↓
+
+Scroll immediately ✅
+
+↓
+
+Run JavaScript
+
+Much smoother.
+-->
+
+
+
+<!--
+What happens if you DO call preventDefault()?
+
+window.addEventListener("wheel", (e) => {
+
+    e.preventDefault();
+
+}, {
+    passive: true
+});
+
+Browser says: ❌ Nope.
+You promised not to do that.
+
+Usually we'll see something like: Unable to preventDefault inside passive event listener.
+The call is ignored.
+-->
+
+
+
+<!--
+Which events commonly use passive?
+- Scroll, wheel, touchstart, touchmove
+
+These fire many times per second.
+Optimizing them matters.
+-->
