@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Table</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>Developer Directory</h1>
+            <p class="subtitle">Click any column header to sort</p>
+        </header>
+
+        <!-- Search box -->
+        <div class="toolbar">
+            <input id="searchInput" type="text" placeholder="Search by name, role, or city..." autocomplete="off">
+            <span id="rowCount"></span>
+        </div>
+
+        <!-- Table is built entirely by JS — only the wrapper exists in HTML -->
+        <div class="table-wrapper">
+            <table id="dataTable">
+                <thead id="tableHead"></thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <p id="emptyMsg">No results found.</p>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

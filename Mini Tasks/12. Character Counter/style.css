@@ -1,0 +1,273 @@
+/* =====================
+   Reset & Base
+===================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #0f1117;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 16px;
+}
+
+
+/* =====================
+   App Container
+===================== */
+
+.app {
+    width: 100%;
+    max-width: 520px;
+}
+
+
+/* =====================
+   Header
+===================== */
+
+header {
+    margin-bottom: 28px;
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #f8fafc;
+}
+
+header .subtitle {
+    margin-top: 4px;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+
+/* =====================
+   Counter Card
+===================== */
+
+.counter-card {
+    background: #1e2130;
+    border: 1px solid #2d3248;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+
+/* =====================
+   Label Row
+===================== */
+
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.label-row label {
+    font-size: 0.775rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.limit-label {
+    font-size: 0.75rem;
+    color: #4a5568;
+}
+
+
+/* =====================
+   Textarea
+===================== */
+
+#textArea {
+    width: 100%;
+    padding: 14px 16px;
+    background: #0f1117;
+    border: 1px solid #2d3248;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    font-family: inherit;
+    line-height: 1.6;
+    resize: vertical;
+    /* allow vertical resize only */
+    outline: none;
+    transition: border-color 0.25s;
+}
+
+#textArea::placeholder {
+    color: #4a5568;
+}
+
+#textArea:focus {
+    border-color: #4f9cf9;
+}
+
+
+/* =====================
+   Textarea Border — reacts to card state
+   (state class is on .counter-card, textarea is a child)
+===================== */
+
+.state-warning #textArea:focus {
+    border-color: #fbbf24;
+}
+
+.state-danger #textArea:focus {
+    border-color: #fb923c;
+}
+
+.state-over #textArea {
+    border-color: #f87171;
+}
+
+.state-over #textArea:focus {
+    border-color: #f87171;
+}
+
+
+/* =====================
+   Progress Track
+===================== */
+
+.progress-track {
+    height: 4px;
+    background: #2d3248;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 4px;
+    transition: width 0.15s ease, background 0.25s ease;
+}
+
+
+/* =====================
+   Progress Fill Color — reacts to card state
+===================== */
+
+.state-normal .progress-fill {
+    background: #4f9cf9;
+}
+
+/* blue   */
+.state-warning .progress-fill {
+    background: #fbbf24;
+}
+
+/* yellow */
+.state-danger .progress-fill {
+    background: #fb923c;
+}
+
+/* orange */
+.state-over .progress-fill {
+    background: #f87171;
+}
+
+/* red    */
+
+
+/* =====================
+   Counter Row
+===================== */
+
+.counter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#statusText {
+    font-size: 0.775rem;
+    color: #4a5568;
+    transition: color 0.25s;
+}
+
+#countDisplay {
+    font-size: 1.4rem;
+    font-weight: 700;
+    transition: color 0.25s;
+    line-height: 1;
+}
+
+
+/* =====================
+   Count Color — reacts to card state
+===================== */
+
+.state-normal #countDisplay {
+    color: #4f9cf9;
+}
+
+/* blue   */
+.state-warning #countDisplay {
+    color: #fbbf24;
+}
+
+/* yellow */
+.state-danger #countDisplay {
+    color: #fb923c;
+}
+
+/* orange */
+.state-over #countDisplay {
+    color: #f87171;
+}
+
+/* red    */
+
+
+
+.shake {
+    animation: shake 0.35s ease;
+}
+/* =====================
+   Shake Animation
+   Plays once when user first crosses the limit
+===================== */
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-5px);
+    }
+
+    40% {
+        transform: translateX(5px);
+    }
+
+    60% {
+        transform: translateX(-4px);
+    }
+
+    80% {
+        transform: translateX(4px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}

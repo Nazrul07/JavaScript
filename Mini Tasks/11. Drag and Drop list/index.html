@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>Task Order</h1>
+            <p class="subtitle">Drag the ⠿ handle to reorder tasks</p>
+        </header>
+
+        <!--
+            draggable="true" is what enables the browser's
+            native Drag and Drop API on each list item
+        -->
+        <ul id="sortableList">
+
+            <li class="list-item" draggable="true">
+                <span class="handle">⠿</span>
+                <div class="item-body">
+                    <span class="item-title">Plan the project structure</span>
+                    <span class="item-tag planning">Planning</span>
+                </div>
+            </li>
+
+            <li class="list-item" draggable="true">
+                <span class="handle">⠿</span>
+                <div class="item-body">
+                    <span class="item-title">Set up development environment</span>
+                    <span class="item-tag setup">Setup</span>
+                </div>
+            </li>
+
+            <li class="list-item" draggable="true">
+                <span class="handle">⠿</span>
+                <div class="item-body">
+                    <span class="item-title">Design the UI mockups</span>
+                    <span class="item-tag design">Design</span>
+                </div>
+            </li>
+
+            <li class="list-item" draggable="true">
+                <span class="handle">⠿</span>
+                <div class="item-body">
+                    <span class="item-title">Write the HTML structure</span>
+                    <span class="item-tag code">Code</span>
+                </div>
+            </li>
+
+            <li class="list-item" draggable="true">
+                <span class="handle">⠿</span>
+                <div class="item-body">
+                    <span class="item-title">Style components with CSS</span>
+                    <span class="item-tag code">Code</span>
+                </div>
+            </li>
+
+            <li class="list-item" draggable="true">
+                <span class="handle">⠿</span>
+                <div class="item-body">
+                    <span class="item-title">Add JavaScript logic</span>
+                    <span class="item-tag code">Code</span>
+                </div>
+            </li>
+
+            <li class="list-item" draggable="true">
+                <span class="handle">⠿</span>
+                <div class="item-body">
+                    <span class="item-title">Test and debug</span>
+                    <span class="item-tag testing">Testing</span>
+                </div>
+            </li>
+
+            <li class="list-item" draggable="true">
+                <span class="handle">⠿</span>
+                <div class="item-body">
+                    <span class="item-title">Deploy to production</span>
+                    <span class="item-tag deploy">Deploy</span>
+                </div>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

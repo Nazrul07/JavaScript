@@ -1,0 +1,277 @@
+/* =====================
+   Reset & Base
+===================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #0f1117;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    padding: 60px 16px;
+}
+
+
+/* =====================
+   App Container
+===================== */
+
+.app {
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+
+/* =====================
+   Header
+===================== */
+
+header {
+    margin-bottom: 28px;
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #f8fafc;
+}
+
+header .subtitle {
+    margin-top: 4px;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+
+/* =====================
+   Toolbar
+===================== */
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+#searchInput {
+    flex: 1;
+    padding: 11px 16px;
+    background: #1e2130;
+    border: 1px solid #2d3248;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+#searchInput::placeholder {
+    color: #4a5568;
+}
+
+#searchInput:focus {
+    border-color: #4f9cf9;
+}
+
+#rowCount {
+    font-size: 0.8rem;
+    color: #4a5568;
+    white-space: nowrap;
+}
+
+
+/* =====================
+   Table Wrapper
+===================== */
+
+.table-wrapper {
+    background: #1e2130;
+    border: 1px solid #2d3248;
+    border-radius: 12px;
+    overflow: hidden;
+    /* clips table corners to card */
+}
+
+#dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    /* removes gaps between cells */
+}
+
+
+/* =====================
+   Table Head
+===================== */
+
+#dataTable th {
+    padding: 13px 16px;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+
+#dataTable thead tr {
+    background: #161a27;
+    border-bottom: 1px solid #2d3248;
+    /* border-bottom: 1px solid #10b981; */
+}
+
+#dataTable th:hover {
+    /* color: #94a3b8; */
+    color: red;
+}
+
+/* Active sorted column header */
+#dataTable th.sorted {
+    color: #4f9cf9;
+}
+
+/* Sort arrow sits after header text */
+#dataTable th .sort-arrow {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 0.7rem;
+    opacity: 0.4;
+    transition: opacity 0.2s;
+}
+
+#dataTable th.sorted .sort-arrow {
+    opacity: 1;
+    color: #4f9cf9;
+}
+
+
+/* =====================
+   Table Body
+===================== */
+
+#dataTable tbody tr {
+    border-bottom: 1px solid #1a1f2e;
+    transition: background 0.15s;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+#dataTable tbody tr:last-child {
+    border-bottom: none;
+}
+
+#dataTable tbody tr:hover {
+    background: #252a3a;
+}
+
+#dataTable td {
+    padding: 13px 16px;
+    font-size: 0.875rem;
+    color: #cbd5e1;
+    vertical-align: middle;
+}
+
+
+/* =====================
+   Name Cell — bold + avatar initial
+===================== */
+
+.cell-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #1a2d45;
+    border: 1px solid #2d4a6e;
+    color: #4f9cf9;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.name-text {
+    font-weight: 500;
+    color: #f1f5f9;
+}
+
+
+/* =====================
+   Status Badge
+===================== */
+
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.badge-active {
+    background: #0f2d1f;
+    color: #4ade80;
+}
+
+.badge-remote {
+    background: #1e2d45;
+    color: #60a5fa;
+}
+
+.badge-contract {
+    background: #2d2a1e;
+    color: #fbbf24;
+}
+
+
+/* =====================
+   Salary — monospace so digits align
+===================== */
+
+.cell-salary {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+
+/* =====================
+   Empty Message
+===================== */
+
+#emptyMsg {
+    display: none;
+    text-align: center;
+    color: #4a5568;
+    font-size: 0.875rem;
+    padding: 36px;
+}

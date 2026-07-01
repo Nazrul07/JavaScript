@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Counter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>Character Counter</h1>
+            <p class="subtitle">Type your message below</p>
+        </header>
+
+        <!--
+            id="counterCard" is the STATE HOLDER.
+            JS adds one class to this element: state-normal | state-warning
+            | state-danger | state-over.
+            All child elements react to it through CSS — one JS change,
+            everything updates automatically.
+        -->
+        <div class="counter-card state-normal" id="counterCard">
+
+            <!-- Top row: label + limit info -->
+            <div class="label-row">
+                <label for="textArea">Message</label>
+                <span class="limit-label">Limit: 280</span>
+            </div>
+
+            <!-- The textarea — no maxlength, JS handles everything -->
+            <textarea id="textArea" placeholder="Start typing your message..." rows="6"></textarea>
+
+            <!-- Progress bar track -->
+            <div class="progress-track">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+
+            <!-- Bottom row: status text + count number -->
+            <div class="counter-row">
+                <span id="statusText">characters remaining</span>
+                <span id="countDisplay">280</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

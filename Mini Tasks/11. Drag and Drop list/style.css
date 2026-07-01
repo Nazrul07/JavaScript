@@ -1,0 +1,205 @@
+/* =====================
+   Reset & Base
+===================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #0f1117;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 16px;
+}
+
+
+/* =====================
+   App Container
+===================== */
+
+.app {
+    width: 100%;
+    max-width: 520px;
+}
+
+
+/* =====================
+   Header
+===================== */
+
+header {
+    margin-bottom: 28px;
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #f8fafc;
+}
+
+header .subtitle {
+    margin-top: 4px;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+
+/* =====================
+   List
+===================== */
+
+#sortableList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+/* =====================
+   List Item — Default State
+===================== */
+
+.list-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: #1e2130;
+    border: 1px solid #2d3248;
+    border-radius: 8px;
+    cursor: default;
+    transition: background 0.15s;
+
+    /* box-shadow used for drop indicators — doesn't affect layout */
+    box-shadow: none;
+}
+
+.list-item:hover {
+    background: #252a3a;
+    border-color: #3d4460;
+}
+
+
+/* =====================
+   List Item — Dragging State
+   Added by JS in dragstart via setTimeout trick
+===================== */
+
+.list-item.dragging {
+    opacity: 0.35;
+    background: #1a1f2e;
+    border-style: dashed;
+}
+
+
+/* =====================
+   Drop Indicators
+   box-shadow draws the line WITHOUT affecting layout
+   (border would shift other elements by 1-2px)
+===================== */
+
+/* Blue line ABOVE the item — insert before */
+.list-item.drop-above {
+    box-shadow: 0 -3px 0 #4f9cf9;
+}
+
+
+/* Blue line BELOW the item — insert after */
+.list-item.drop-below {
+    box-shadow: 0 3px 0 #4f9cf9;
+}
+
+
+/* =====================
+   Drag Handle
+===================== */
+
+.handle {
+    color: #4a5568;
+    font-size: 1.1rem;
+    cursor: grab;
+    flex-shrink: 0;
+    user-select: none;      /* prevent text selection while dragging */
+    line-height: 1;         /* no extra space */
+    transition: color 0.15s;
+}
+
+.handle:active {
+    cursor: grabbing;
+}
+
+.list-item:hover .handle {
+    color: #64748b;
+}
+
+
+/* =====================
+   Item Body
+===================== */
+
+.item-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;                /* take available space */
+    gap: 12px;
+}
+
+.item-title {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+}
+
+
+/* =====================
+   Tags
+===================== */
+
+.item-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.item-tag.planning {
+    background: #1e2d45;
+    color: #60a5fa;
+}
+
+.item-tag.setup {
+    background: #1e2d2d;
+    color: #34d399;
+}
+
+.item-tag.design {
+    background: #2d1e45;
+    color: #a78bfa;
+}
+
+.item-tag.code {
+    background: #2d2a1e;
+    color: #fbbf24;
+}
+
+.item-tag.testing {
+    background: #2d1e1e;
+    color: #f87171;
+}
+
+.item-tag.deploy {
+    background: #1e2d1e;
+    color: #4ade80;
+}
