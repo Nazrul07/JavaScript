@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Event Listeners</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            width: 500px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        button {
+            padding: 12px 22px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        #log {
+            background: #222;
+            color: #00ff66;
+            padding: 15px;
+            border-radius: 6px;
+            min-height: 180px;
+            font-family: monospace;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>Multiple Event Listeners</h2>
+
+        <p>
+            Click the button. Three different event listeners are attached
+            to the same button.
+        </p>
+
+        <button id="btn">Click Me</button>
+
+        <div id="log"></div>
+
+    </div>
+
+    <script>
+
+        const btn = document.querySelector("#btn");
+        const log = document.querySelector("#log");
+
+        function print(message) {
+
+            log.innerHTML += message + "<br>";
+
+        }
+
+        // First Listener
+        btn.addEventListener("click", () => {
+
+            print("① First Event Listener");
+
+        });
+
+        // Second Listener
+        btn.addEventListener("click", () => {
+
+            print("② Second Event Listener");
+
+        });
+
+        // Third Listener
+        btn.addEventListener("click", () => {
+
+            print("③ Third Event Listener");
+
+        });
+
+    </script>
+
+</body>
+
+</html>

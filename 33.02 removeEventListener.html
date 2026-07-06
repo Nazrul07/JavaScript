@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>removeEventListener Demo</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 30px;
+        }
+
+        button {
+            padding: 10px 18px;
+            margin: 6px;
+        }
+
+        #log {
+            margin-top: 20px;
+            padding: 15px;
+            background: #222;
+            color: #0f0;
+            height: 250px;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>removeEventListener Demo</h2>
+
+    <button id="btn1">Example 1 (Named Function)</button>
+
+    <button id="remove1">Remove Listener</button>
+
+    <hr>
+
+    <button id="btn2">Example 2 (Anonymous Function)</button>
+
+    <button id="remove2">Try Remove</button>
+
+    <hr>
+
+    <button id="btn3">Example 3 (Stored Arrow Function)</button>
+
+    <button id="remove3">Remove Listener</button>
+
+    <div id="log"></div>
+
+    <script>
+
+        const log = document.querySelector("#log");
+
+        function print(msg) {
+
+            log.innerHTML += msg + "<br>";
+
+        }
+
+        //=================================================
+        // Example 1
+        //=================================================
+
+        const btn1 = document.querySelector("#btn1");
+
+        function handleClick() {
+            print("Example 1 : Button clicked");
+        };
+
+        btn1.addEventListener("click", handleClick);
+
+        document.querySelector("#remove1").onclick = () => {
+            btn1.removeEventListener("click", handleClick);
+
+            print("Example 1 listener removed");
+        }; 
+        // When I click on the "Remove Listener" button, the event listener that is on btn1 will permanently be removed.
+        // So, if I click on btn1 after that, nothing will happen.
+
+
+
+        //=================================================
+        // Example 2
+        //=================================================
+
+        const btn2 = document.querySelector("#btn2");
+
+        btn2.addEventListener("click", () => {
+
+            print("Example 2 : Anonymous function");
+
+        });
+
+        document.querySelector("#remove2").onclick = () => {
+
+            btn2.removeEventListener("click", () => {
+
+                print("Example 2 : Anonymous function");
+                return;
+            });
+
+            print("Tried removing... but it FAILED!.");
+            print("Counld not find the listener to remove.");
+
+        };
+        // Here I'm trying to remove the event listener that is on btn2, but it will not work.
+        // Because the function that I passed to removeEventListener is not the same as the one that was passed to addEventListener.
+        // They look identical, but they are not the same function in memory.
+        /*
+            Think of it like this:
+
+            First one
+            Function A -> 0x200A(Memory address)
+
+            Second one
+            Function B -> 0x200B(Memory address)
+
+            So, browser search for 0x200B. But only 0x200A exists. Nothing matches. Nothing removed.
+        */
+
+
+
+        //=================================================
+        // Example 3
+        //=================================================
+
+        const btn3 = document.querySelector("#btn3");
+
+        const arrowHandler = () => print("Example 3 : Stored arrow function");
+
+        btn3.addEventListener("click", arrowHandler);
+
+        document.querySelector("#remove3").onclick = () => {
+
+            btn3.removeEventListener("click", arrowHandler);
+
+            print("Example 3 listener removed");
+
+        };
+
+    </script>
+
+</body>
+
+</html>
