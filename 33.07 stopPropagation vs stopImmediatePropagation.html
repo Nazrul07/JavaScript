@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>stopPropagation vs stopImmediatePropagation</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #eef2f7;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+
+            width: 760px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .15);
+
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .info {
+
+            color: #555;
+            margin-bottom: 20px;
+
+        }
+
+        .section {
+
+            margin-top: 25px;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+
+        }
+
+        button {
+
+            padding: 12px 22px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+
+        }
+
+        #log {
+
+            margin-top: 20px;
+            background: #222;
+            color: #00ff66;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 220px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow: auto;
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>stopPropagation vs stopImmediatePropagation</h2>
+
+        <p class="info">
+
+            Open the log below and try both buttons.
+
+        </p>
+
+        <div class="section">
+
+            <h3>Demo 1 : stopPropagation()</h3>
+
+            <button id="btn1">
+                Click Me
+            </button>
+
+        </div>
+
+        <div class="section">
+
+            <h3>Demo 2 : stopImmediatePropagation()</h3>
+
+            <button id="btn2">
+                Click Me
+            </button>
+
+        </div>
+
+        <div id="log"></div>
+
+    </div>
+
+    <script>
+
+        const log = document.querySelector("#log");
+
+        function print(text) {
+
+            log.innerHTML += text + "<br>";
+            log.scrollTop = log.scrollHeight;
+
+        }
+
+        //-----------------------------------------------------
+        // Document Listener
+        //-----------------------------------------------------
+
+        document.addEventListener("click", () => {
+
+            print("🌍 Document Listener");
+
+        });
+
+        //-----------------------------------------------------
+        // stopPropagation()
+        //-----------------------------------------------------
+
+        const btn1 = document.querySelector("#btn1");
+
+        btn1.addEventListener("click", (e) => {
+
+            e.stopPropagation();
+
+            print("① Button Listener 1");
+
+        });
+
+        btn1.addEventListener("click", () => {
+
+            print("② Button Listener 2");
+
+        });
+
+        //-----------------------------------------------------
+        // stopImmediatePropagation()
+        //-----------------------------------------------------
+
+        const btn2 = document.querySelector("#btn2");
+
+        btn2.addEventListener("click", (e) => {
+
+            e.stopImmediatePropagation();
+
+            print("① First Listener");
+
+        });
+
+        btn2.addEventListener("click", () => {
+
+            print("② Second Listener");
+
+        });
+
+        btn2.addEventListener("click", () => {
+
+            print("③ Third Listener");
+
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>preventDefault()</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            width: 760px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .15);
+        }
+
+        .section {
+            margin: 25px 0;
+            padding: 18px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        input {
+            padding: 8px;
+            margin-right: 10px;
+        }
+
+        #dragBox {
+            width: 120px;
+            padding: 15px;
+            text-align: center;
+            background: #2563eb;
+            color: white;
+            border-radius: 8px;
+            cursor: grab;
+        }
+
+        #menu {
+            display: none;
+            position: fixed;
+            background: white;
+            border: 1px solid #999;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+        }
+
+        #log {
+            margin-top: 20px;
+            background: #222;
+            color: #00ff66;
+
+            height: 180px;
+            overflow: auto;
+
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>preventDefault()</h2>
+
+        <!-- Link -->
+        <div class="section">
+
+            <h3>1. Link</h3>
+
+            <a id="googleLink" href="https://www.google.com"> Go to Google </a>
+
+        </div>
+
+        <!-- Form -->
+        <div class="section">
+
+            <h3>2. Form</h3>
+
+            <form id="myForm">
+
+                <input type="text" placeholder="Your Name" required>
+
+                <button> Submit </button>
+
+            </form>
+
+        </div>
+
+        <!-- Right Click -->
+
+        <div class="section">
+
+            <h3>3. Right Click</h3>
+
+            <p> Right click anywhere inside this page. </p>
+
+        </div>
+
+        <!-- Drag -->
+
+        <div class="section">
+
+            <h3>4. Drag</h3>
+
+            <div id="dragBox" draggable="true"> Drag Me </div>
+
+        </div>
+
+        <div id="menu"> Custom Menu </div>
+
+        <div id="log"></div>
+
+    </div>
+
+    <script>
+
+        const log = document.querySelector("#log");
+
+        function print(text) {
+            log.innerHTML += text + "<br>";
+            log.scrollTop = log.scrollHeight;
+        }
+
+        //-------------------------------------
+        // Link
+        //-------------------------------------
+
+        document.querySelector("#googleLink")
+            .addEventListener("click", (e) => {
+
+                e.preventDefault();
+
+                print("✅ Navigation prevented.");
+
+            });
+
+        //-------------------------------------
+        // Form
+        //-------------------------------------
+
+        document.querySelector("#myForm")
+            .addEventListener("submit", (e) => {
+
+                e.preventDefault();
+
+                print("✅ Form submitted using JavaScript.");
+
+            });
+
+        //-------------------------------------
+        // Right Click
+        //-------------------------------------
+
+        const menu = document.querySelector("#menu");
+
+        document.addEventListener("contextmenu", (e) => {
+
+            e.preventDefault();
+
+            menu.style.display = "block";
+
+            menu.style.left = e.clientX + "px";
+
+            menu.style.top = e.clientY + "px";
+
+            print("✅ Default context menu prevented.");
+
+        });
+
+        document.addEventListener("click", () => {
+
+            menu.style.display = "none";
+
+        });
+
+        //-------------------------------------
+        // Drag
+        //-------------------------------------
+
+        document.querySelector("#dragBox")
+            .addEventListener("dragstart", (e) => {
+
+                e.preventDefault();
+
+                print("✅ Drag prevented.");
+
+            });
+
+    </script>
+
+</body>
+
+</html>
