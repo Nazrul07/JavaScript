@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Events Playground</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            width: 850px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+        }
+
+        .info {
+            color: #555;
+            line-height: 1.7;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        input,
+        select {
+
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #aaa;
+
+        }
+
+        label {
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+        }
+
+        .buttons {
+
+            display: flex;
+            gap: 10px;
+
+        }
+
+        button {
+
+            padding: 10px 18px;
+            cursor: pointer;
+
+        }
+
+        #log {
+
+            margin-top: 20px;
+            background: #222;
+            color: #00ff66;
+
+            height: 230px;
+            overflow-y: auto;
+
+            padding: 15px;
+            border-radius: 8px;
+
+            font-family: monospace;
+            white-space: pre-wrap;
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>Form Events Playground</h2>
+
+        <p class="info">
+
+            Try these:
+
+            • Click inside the input.
+
+            • Type your name.
+
+            • Select part of the text.
+
+            • Click somewhere else.
+
+            • Change the country.
+
+            • Check/uncheck the checkbox.
+
+            • Submit and Reset.
+
+        </p>
+
+        <form id="myForm">
+
+            <input id="name" type="text" placeholder="Type your name...">
+
+            <select id="country">
+
+                <option value="">Choose Country</option>
+                <option>Bangladesh</option>
+                <option>Nepal</option>
+                <option>Japan</option>
+                <option>Canada</option>
+
+            </select>
+
+            <label>
+
+                <input id="agree" type="checkbox">
+
+                I agree
+
+            </label>
+
+            <div class="buttons">
+
+                <button type="submit">
+
+                    Submit
+
+                </button>
+
+                <button type="reset">
+
+                    Reset
+
+                </button>
+
+            </div>
+
+        </form>
+
+        <div id="log"></div>
+
+    </div>
+
+    <script>
+
+        const form = document.querySelector("#myForm");
+        const input = document.querySelector("#name");
+        const select = document.querySelector("#country");
+        const checkbox = document.querySelector("#agree");
+        const log = document.querySelector("#log");
+
+        function print(text) {
+
+            log.innerHTML += text + "<br>";
+            log.scrollTop = log.scrollHeight;
+
+        }
+
+        //--------------------------
+        // FORM
+        //--------------------------
+
+        form.addEventListener("submit", (e) => {
+
+            e.preventDefault();
+
+            print("📨 submit");
+
+        });
+
+        form.addEventListener("reset", () => {
+
+            print("🔄 reset");
+
+        });
+
+        //--------------------------
+        // INPUT
+        //--------------------------
+
+        input.addEventListener("input", (e) => {
+
+            print("⌨ input : " + e.target.value);
+
+        });
+
+        input.addEventListener("change", (e) => {
+
+            print("✅ change : " + e.target.value);
+
+        });
+
+        input.addEventListener("focus", () => {
+
+            print("🟢 focus");
+
+        });
+
+        input.addEventListener("blur", () => {
+
+            print("🔴 blur");
+
+        });
+
+        //--------------------------
+        // FORM (focusin/out)
+        //--------------------------
+
+        form.addEventListener("focusin", (e) => {
+
+            print("➡ focusin : " + e.target.tagName);
+
+        });
+
+        form.addEventListener("focusout", (e) => {
+
+            print("⬅ focusout : " + e.target.tagName);
+
+        });
+
+        //--------------------------
+        // TEXT SELECT
+        //--------------------------
+
+        input.addEventListener("select", () => {
+
+            const selected = input.value.substring(
+                input.selectionStart,
+                input.selectionEnd
+            );
+
+            print("📝 selected : " + selected);
+
+        });
+
+        //--------------------------
+        // SELECT
+        //--------------------------
+
+        select.addEventListener("change", (e) => {
+
+            print("🌍 country : " + e.target.value);
+
+        });
+
+        //--------------------------
+        // CHECKBOX
+        //--------------------------
+
+        checkbox.addEventListener("change", (e) => {
+
+            print("☑ checked : " + e.target.checked);
+
+        });
+
+    </script>
+
+</body>
+
+</html>

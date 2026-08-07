@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mouse Events Demo</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            width: 850px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+        }
+
+        .info {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        #box {
+
+            width: 320px;
+            height: 180px;
+
+            background: #2563eb;
+            color: white;
+
+            margin: 25px auto;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 10px;
+
+            user-select: none;
+            cursor: pointer;
+
+        }
+
+        #inner {
+
+            width: 120px;
+            height: 70px;
+
+            background: #16a34a;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 8px;
+
+        }
+
+        #log {
+
+            margin-top: 20px;
+
+            background: #222;
+            color: #00ff66;
+
+            height: 220px;
+            overflow-y: auto;
+
+            padding: 15px;
+            border-radius: 8px;
+
+            font-family: monospace;
+            white-space: pre-wrap;
+
+        }
+
+        button {
+
+            padding: 10px 16px;
+            cursor: pointer;
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>Mouse Events</h2>
+
+        <p class="info">
+
+            Try these:
+
+            • Left click
+
+            • Double click
+
+            • Right click
+
+            • Hold mouse button
+
+            • Move mouse
+
+            • Move into the green box
+
+        </p>
+
+        <div id="box">
+
+            Outer Box
+
+            <div id="inner">
+
+                Inner
+
+            </div>
+
+        </div>
+
+        <button id="clear">
+
+            Clear Log
+
+        </button>
+
+        <div id="log"></div>
+
+    </div>
+
+    <script>
+
+        const box = document.querySelector("#box");
+        const log = document.querySelector("#log");
+
+        function print(text) {
+
+            log.innerHTML += text + "<br>";
+            log.scrollTop = log.scrollHeight;
+
+        }
+
+        document.querySelector("#clear").onclick = () => {
+
+            log.innerHTML = "";
+
+        };
+
+        //----------------------------
+        // Click Events
+        //----------------------------
+
+        box.addEventListener("click", () => {
+
+            print("🖱 click");
+
+        });
+
+        box.addEventListener("dblclick", () => {
+
+            print("🖱 double click");
+
+        });
+
+        box.addEventListener("mousedown", (e) => {
+
+            print("⬇ mousedown (button = " + e.button + ")");
+
+        });
+
+        box.addEventListener("mouseup", (e) => {
+
+            print("⬆ mouseup (button = " + e.button + ")");
+
+        });
+
+        box.addEventListener("contextmenu", (e) => {
+
+            e.preventDefault();
+
+            print("🟡 right click (contextmenu)");
+
+        });
+
+        //----------------------------
+        // Movement
+        //----------------------------
+
+        box.addEventListener("mousemove", (e) => {
+
+            print(
+                `move | offset(${e.offsetX}, ${e.offsetY})`
+            );
+
+        });
+
+        box.addEventListener("mouseenter", () => {
+
+            print("✅ mouseenter");
+
+        });
+
+        box.addEventListener("mouseleave", () => {
+
+            print("❌ mouseleave");
+
+        });
+
+        box.addEventListener("mouseover", (e) => {
+
+            print("🔵 mouseover : " + e.target.id);
+
+        });
+
+        box.addEventListener("mouseout", (e) => {
+
+            print("🔴 mouseout : " + e.target.id);
+
+        });
+
+    </script>
+
+</body>
+
+</html>

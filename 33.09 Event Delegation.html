@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Event Delegation</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            width: 800px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .info {
+            color: #555;
+        }
+
+        #controls {
+            margin: 20px 0;
+        }
+
+        input {
+            padding: 10px;
+            width: 220px;
+        }
+
+        button {
+            padding: 10px 16px;
+            cursor: pointer;
+        }
+
+        #userList {
+            list-style: none;
+            padding: 0;
+        }
+
+        .user-item {
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 12px;
+            margin: 10px 0;
+
+            background: #f8fafc;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+
+        }
+
+        .name {
+
+            font-weight: bold;
+
+        }
+
+        .actions button {
+
+            margin-left: 8px;
+
+        }
+
+        #log {
+
+            margin-top: 20px;
+            background: #222;
+            color: #00ff66;
+
+            height: 180px;
+            overflow-y: auto;
+
+            padding: 15px;
+            border-radius: 8px;
+
+            font-family: monospace;
+            white-space: pre-wrap;
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>Event Delegation</h2>
+
+        <p class="info">
+
+            Try these:
+
+            • Click Edit
+
+            • Click Delete
+
+            • Add a new user
+
+            Notice that newly added users work automatically.
+
+        </p>
+
+        <div id="controls">
+
+            <input id="username" placeholder="Enter user name">
+
+            <button id="addBtn">
+
+                Add User
+
+            </button>
+
+        </div>
+
+        <ul id="userList">
+
+            <li class="user-item" data-id="1">
+
+                <span class="name">
+
+                    Alex
+
+                </span>
+
+                <div class="actions">
+
+                    <button class="edit-btn">
+
+                        Edit
+
+                    </button>
+
+                    <button class="delete-btn">
+
+                        Delete
+
+                    </button>
+
+                </div>
+
+            </li>
+
+            <li class="user-item" data-id="2">
+
+                <span class="name">
+
+                    Bob
+
+                </span>
+
+                <div class="actions">
+
+                    <button class="edit-btn">
+
+                        Edit
+
+                    </button>
+
+                    <button class="delete-btn">
+
+                        Delete
+
+                    </button>
+
+                </div>
+
+            </li>
+
+        </ul>
+
+        <div id="log"></div>
+
+    </div>
+
+    <script>
+
+        const input = document.querySelector("#username");
+        const list = document.querySelector("#userList");
+        const log = document.querySelector("#log");
+
+        let nextId = 3;
+
+        function print(text) {
+
+            log.innerHTML += text + "<br>";
+            log.scrollTop = log.scrollHeight;
+
+        }
+
+        //------------------------------------
+        // ONE listener
+        //------------------------------------
+
+        list.addEventListener("click", (e) => {
+
+            const item = e.target.closest(".user-item");
+
+            if (!item) return;
+
+            const id = item.dataset.id;
+
+            //--------------------------------
+            // Delete
+            //--------------------------------
+
+            if (e.target.matches(".delete-btn")) {
+
+                print("Deleted User ID : " + id);
+
+                item.remove();
+
+            }
+
+            //--------------------------------
+            // Edit
+            //--------------------------------
+
+            if (e.target.matches(".edit-btn")) {
+
+                const span = item.querySelector(".name");
+
+                const newName = prompt("Enter new name", span.textContent);     // prompt() takes two values, first is the message and second is the default value.
+
+                if (newName) {
+
+                    span.textContent = newName;
+
+                    print("Edited User " + id);
+
+                }
+
+            }
+
+        });
+
+        //------------------------------------
+        // Add User
+        //------------------------------------
+
+        document.querySelector("#addBtn")
+            .addEventListener("click", () => {
+
+                const name = input.value.trim();
+
+                if (!name) return;
+
+                const li = document.createElement("li");
+
+                li.className = "user-item";
+
+                li.dataset.id = nextId++;
+
+                li.innerHTML = `
+
+    <span class="name">
+
+    ${name}
+
+    </span>
+
+    <div class="actions">
+
+        <button class="edit-btn">
+
+        Edit
+
+        </button>
+
+        <button class="delete-btn">
+
+        Delete
+
+        </button>
+
+    </div>
+
+    `;
+
+                list.append(li);
+
+                print("Added " + name);
+
+                input.value = "";
+
+            });
+
+    </script>
+
+</body>
+
+</html>
