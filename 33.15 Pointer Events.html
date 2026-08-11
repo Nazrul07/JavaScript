@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pointer Events Playground</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            min-height: 100vh;
+
+        }
+
+        .card {
+
+            width: 850px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+
+        }
+
+        .info {
+
+            color: #555;
+            line-height: 1.7;
+
+        }
+
+        .area {
+
+            margin-top: 20px;
+
+            height: 350px;
+
+            border: 3px dashed #999;
+
+            border-radius: 10px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            touch-action: none;
+
+            background: white;
+
+        }
+
+        #ball {
+
+            width: 60px;
+            height: 60px;
+
+            border-radius: 50%;
+
+            background: #4caf50;
+
+            position: absolute;
+
+            left: 30px;
+            top: 30px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            color: white;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            user-select: none;
+
+        }
+
+        #log {
+
+            margin-top: 20px;
+
+            background: #222;
+            color: #00ff66;
+
+            height: 220px;
+
+            overflow-y: auto;
+
+            padding: 15px;
+
+            border-radius: 8px;
+
+            font-family: monospace;
+
+            white-space: pre-wrap;
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>Pointer Events Playground</h2>
+
+        <p class="info">
+
+            Drag the green circle.
+
+            <br><br>
+
+            Works with
+
+            • Mouse
+
+            • Touch
+
+            • Stylus
+
+        </p>
+
+        <div class="area">
+
+            <div id="ball">
+
+                Drag
+
+            </div>
+
+        </div>
+
+        <div id="log"></div>
+
+    </div>
+
+    <script>
+
+        const ball = document.querySelector("#ball");
+        const area = document.querySelector(".area");
+        const log = document.querySelector("#log");
+
+        let dragging = false;
+
+        let offsetX = 0;
+        let offsetY = 0;
+
+        function print(text) {
+
+            log.innerHTML += text + "<br>";
+            log.scrollTop = log.scrollHeight;
+
+        }
+
+        //-------------------------
+        // pointerenter
+        //-------------------------
+
+        ball.addEventListener("pointerenter", () => {
+
+            print("🟢 pointerenter");
+
+        });
+
+        //-------------------------
+        // pointerleave
+        //-------------------------
+
+        ball.addEventListener("pointerleave", () => {
+
+            print("🔴 pointerleave");
+
+        });
+
+        //-------------------------
+        // pointerdown
+        //-------------------------
+
+        ball.addEventListener("pointerdown", (e) => {
+
+            dragging = true;
+
+            offsetX = e.offsetX;
+            offsetY = e.offsetY;
+
+            ball.setPointerCapture(e.pointerId);
+
+            print("👇 pointerdown");
+
+            print("pointerType : " + e.pointerType);
+
+            print("pointerId : " + e.pointerId);
+
+            print("pressure : " + e.pressure);
+
+            print("----------------");
+
+        });
+
+        //-------------------------
+        // pointermove
+        //-------------------------
+
+        ball.addEventListener("pointermove", (e) => {
+
+            if (!dragging) return;
+
+            const rect = area.getBoundingClientRect();
+
+            let x = e.clientX - rect.left - offsetX;
+            let y = e.clientY - rect.top - offsetY;
+
+            x = Math.max(0, Math.min(rect.width - 60, x));
+            y = Math.max(0, Math.min(rect.height - 60, y));
+
+            ball.style.left = x + "px";
+            ball.style.top = y + "px";
+
+        });
+
+        //-------------------------
+        // pointerup
+        //-------------------------
+
+        ball.addEventListener("pointerup", (e) => {
+
+            dragging = false;
+
+            ball.releasePointerCapture(e.pointerId);
+
+            print("☝ pointerup");
+
+            print("----------------");
+
+        });
+
+        //-------------------------
+        // pointercancel
+        //-------------------------
+
+        ball.addEventListener("pointercancel", () => {
+
+            dragging = false;
+
+            print("⚠ pointercancel");
+
+        });
+
+    </script>
+
+</body>
+
+</html>
