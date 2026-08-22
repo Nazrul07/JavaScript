@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Clipboard Events</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            min-height: 100vh;
+        }
+
+        .card {
+            width: 760px;
+
+            background: #fff;
+
+            padding: 25px;
+
+            border-radius: 10px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .info {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        textarea {
+            width: 100%;
+            height: 130px;
+
+            padding: 12px;
+
+            border: 2px solid #ccc;
+            border-radius: 8px;
+
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4b65d1;
+        }
+
+        .buttons {
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 10px 18px;
+
+            border: none;
+            border-radius: 7px;
+
+            background: #4b65d1;
+            color: white;
+
+            cursor: pointer;
+
+            margin-right: 8px;
+        }
+
+        button:hover {
+            background: #344db0;
+        }
+
+        #log {
+            margin-top: 20px;
+
+            background: #222;
+            color: #00ff66;
+
+            min-height: 200px;
+            max-height: 260px;
+
+            padding: 15px;
+
+            border-radius: 8px;
+
+            font-family: monospace;
+
+            white-space: pre-wrap;
+
+            overflow-y: auto;
+        }
+
+        .note {
+            margin-top: 15px;
+
+            padding: 12px;
+
+            background: #f3f4f6;
+
+            border-radius: 7px;
+
+            color: #555;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>Clipboard Events Playground</h2>
+
+        <p class="info">
+
+            Test the three clipboard events:
+
+            <br><br>
+
+            📋 <b>Copy:</b> Select text and press Ctrl + C
+
+            <br>
+
+            ✂️ <b>Cut:</b> Select text and press Ctrl + X
+
+            <br>
+
+            📥 <b>Paste:</b> Copy something and press Ctrl + V
+
+        </p>
+
+
+        <textarea id="editor">Hello JavaScript!
+Try selecting this text and press Ctrl + C or Ctrl + X.</textarea>
+
+
+        <div class="buttons">
+
+            <button id="clearBtn">
+                Clear Log
+            </button>
+
+        </div>
+
+
+        <div class="note">
+
+            <b>Copy behavior:</b>
+
+            <br>
+
+            The copied text will automatically get:
+
+            <br>
+
+            <code> — Copyright 2026</code>
+
+        </div>
+
+
+        <div id="log"></div>
+
+    </div>
+
+
+    <script>
+
+        const editor = document.querySelector("#editor");
+        const log = document.querySelector("#log");
+        const clearBtn = document.querySelector("#clearBtn");
+
+
+        // =========================================
+        // Helper function
+        // =========================================
+
+        function print(text) {
+
+            log.innerHTML += text + "<br>";
+
+            log.scrollTop = log.scrollHeight;
+
+        }
+
+
+        // =========================================
+        // COPY EVENT
+        // =========================================
+
+        editor.addEventListener("copy", (e) => {
+
+            print("📋 COPY event fired");
+
+
+            // Get selected text from textarea
+            const selected =
+                editor.value.substring(
+                    editor.selectionStart,
+                    editor.selectionEnd
+                );
+
+
+            print("Selected text: " + selected);
+
+
+            // Stop browser's normal copy behavior
+            e.preventDefault();
+
+
+            // Modify what gets copied
+            const modifiedText =
+                selected + " — Copyright 2026";
+
+
+            // Put our modified text into clipboard
+            e.clipboardData.setData(
+                "text/plain",
+                modifiedText
+            );
+
+
+            print("Clipboard now contains:");
+            print(modifiedText);
+
+        });
+
+
+        // =========================================
+        // CUT EVENT
+        // =========================================
+
+        editor.addEventListener("cut", (e) => {
+
+            print("✂️ CUT event fired");
+
+
+            const selected =
+                editor.value.substring(
+                    editor.selectionStart,
+                    editor.selectionEnd
+                );
+
+
+            print("Selected text: " + selected);
+
+
+            /*
+                We are NOT calling preventDefault() here.
+
+                Therefore the browser performs
+                its normal cut behavior:
+
+                1. Copy selected text
+                2. Remove selected text
+            */
+
+        });
+
+
+        // =========================================
+        // PASTE EVENT
+        // =========================================
+
+        editor.addEventListener("paste", (e) => {
+
+            print("📥 PASTE event fired");
+
+
+            // Stop normal browser paste
+            e.preventDefault();
+
+
+            // Get text from clipboard
+            const pasted =
+                e.clipboardData.getData("text/plain");
+
+
+            print("Original pasted text:");
+            print(pasted);
+
+
+            // -----------------------------------------
+            // Sanitize pasted text
+            // -----------------------------------------
+
+            const cleanText =
+                pasted.replace(/<[^>]*>/g, "");
+
+
+            print("After sanitizing:");
+            print(cleanText);
+
+
+            // -----------------------------------------
+            // Insert cleaned text
+            // -----------------------------------------
+
+            editor.setRangeText(
+                cleanText,
+                editor.selectionStart,
+                editor.selectionEnd,
+                "end"
+            );
+
+
+            print("✅ Clean text inserted");
+
+        });
+
+
+        // =========================================
+        // CLEAR LOG
+        // =========================================
+
+        clearBtn.addEventListener("click", () => {
+
+            log.innerHTML = "";
+
+        });
+
+    </script>
+
+</body>
+
+</html>

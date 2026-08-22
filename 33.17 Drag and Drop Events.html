@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Drag & Drop Events</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #eef2f7;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            min-height: 100vh;
+        }
+
+        .card {
+            width: 760px;
+
+            background: #fff;
+
+            padding: 25px;
+
+            border-radius: 10px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .info {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .area {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 20px;
+
+            margin-top: 25px;
+        }
+
+        .dropzone {
+            min-height: 220px;
+
+            border: 3px dashed #aaa;
+
+            border-radius: 10px;
+
+            padding: 20px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 15px;
+
+            transition: .2s;
+        }
+
+        .dropzone.over {
+            border-color: #4b65d1;
+
+            background: #e8edff;
+
+            transform: scale(1.02);
+        }
+
+        .draggable {
+            width: 150px;
+
+            padding: 20px;
+
+            background: #4b65d1;
+
+            color: white;
+
+            text-align: center;
+
+            border-radius: 8px;
+
+            cursor: grab;
+
+            user-select: none;
+
+            transition: .2s;
+        }
+
+        .draggable:hover {
+            background: #344db0;
+        }
+
+        .draggable.dragging {
+            opacity: .5;
+
+            transform: scale(.95);
+        }
+
+        .box-title {
+            font-weight: bold;
+
+            color: #444;
+        }
+
+        #log {
+            margin-top: 20px;
+
+            background: #222;
+
+            color: #00ff66;
+
+            min-height: 180px;
+
+            max-height: 220px;
+
+            padding: 15px;
+
+            border-radius: 8px;
+
+            font-family: monospace;
+
+            white-space: pre-wrap;
+
+            overflow-y: auto;
+        }
+
+        button {
+            margin-top: 15px;
+
+            padding: 10px 18px;
+
+            background: #b14e4e;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #913b3b;
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+    <div class="card">
+
+        <h2>Drag & Drop Events</h2>
+
+        <p class="info">
+
+            Drag the blue box and drop it into the drop zone.
+
+            <br><br>
+
+            Watch the log to see which drag events fire.
+
+        </p>
+
+
+        <div class="area">
+
+            <!-- DRAGGABLE -->
+
+            <div>
+
+                <div class="box-title">
+                    Draggable
+                </div>
+
+                <br>
+
+                <div id="myBox" class="draggable" draggable="true">
+
+                    Drag Me
+
+                </div>
+
+            </div>
+
+
+            <!-- DROP ZONE -->
+
+            <div>
+
+                <div class="box-title">
+                    Drop Zone
+                </div>
+
+                <br>
+
+                <div id="dropZone" class="dropzone">
+
+                    <span>
+                        Drop Here
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <button id="clearBtn">
+            Clear Log
+        </button>
+
+
+        <div id="log"></div>
+
+    </div>
+
+
+    <script>
+
+        const draggable =
+            document.querySelector("#myBox");
+
+        const dropZone =
+            document.querySelector("#dropZone");
+
+        const log =
+            document.querySelector("#log");
+
+        const clearBtn =
+            document.querySelector("#clearBtn");
+
+
+        // ==========================================
+        // Helper
+        // ==========================================
+
+        function print(text) {
+
+            log.innerHTML += text + "<br>";
+
+            log.scrollTop = log.scrollHeight;
+
+        }
+
+
+        // ==========================================
+        // DRAG START
+        // ==========================================
+
+        draggable.addEventListener("dragstart", (e) => {
+
+            print("🟢 dragstart");
+
+            // Store the ID of the element
+            e.dataTransfer.setData(
+                "text/plain",
+                draggable.id
+            );
+
+            print("Data stored: " + draggable.id);
+
+
+            // Tell browser what type of drag operation
+            // we want to perform.
+
+            e.dataTransfer.effectAllowed = "move";
+
+
+            // Visual feedback
+
+            draggable.classList.add("dragging");
+
+        });
+
+
+        // ==========================================
+        // DRAG END
+        // ==========================================
+
+        draggable.addEventListener("dragend", () => {
+
+            print("🔴 dragend");
+
+            draggable.classList.remove("dragging");
+
+        });
+
+
+        // ==========================================
+        // DRAG OVER DROP ZONE
+        // ==========================================
+
+        dropZone.addEventListener("dragover", (e) => {
+
+            /*
+                IMPORTANT:
+    
+                Without preventDefault(),
+                the drop event will NOT normally fire.
+            */
+
+            e.preventDefault();
+
+            print("🟡 dragover");
+
+
+            // Tell browser what will happen
+            // when the item is dropped.
+
+            e.dataTransfer.dropEffect = "move";
+
+
+            dropZone.classList.add("over");
+
+        });
+
+
+        // ==========================================
+        // DRAG LEAVE
+        // ==========================================
+
+        dropZone.addEventListener("dragleave", () => {
+
+            print("⚪ dragleave");
+
+            dropZone.classList.remove("over");
+
+        });
+
+
+        // ==========================================
+        // DROP
+        // ==========================================
+
+        dropZone.addEventListener("drop", (e) => {
+
+            e.preventDefault();
+
+            print("🔵 DROP");
+
+
+            // Get the ID we stored during dragstart
+
+            const id =
+                e.dataTransfer.getData("text/plain");
+
+            print("Received ID: " + id);
+
+
+            // Find the actual element
+
+            const element =
+                document.getElementById(id);
+
+
+            // Move the element into drop zone
+
+            dropZone.append(element);
+
+
+            print("✅ Element moved into drop zone");
+
+
+            dropZone.classList.remove("over");
+
+        });
+
+
+        // ==========================================
+        // CLEAR LOG
+        // ==========================================
+
+        clearBtn.addEventListener("click", () => {
+
+            log.innerHTML = "";
+
+        });
+
+    </script>
+
+
+</body>
+
+</html>

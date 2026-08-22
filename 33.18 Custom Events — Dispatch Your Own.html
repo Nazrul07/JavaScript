@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Custom Events</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            min-height: 100vh;
+        }
+
+        .card {
+            width: 760px;
+
+            background: #fff;
+
+            padding: 25px;
+
+            border-radius: 10px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .info {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 18px;
+
+            margin-right: 10px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #4b65d1;
+            color: white;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #344db0;
+        }
+
+        #log {
+            margin-top: 20px;
+
+            background: #222;
+            color: #00ff66;
+
+            min-height: 220px;
+
+            padding: 15px;
+
+            border-radius: 8px;
+
+            font-family: monospace;
+
+            white-space: pre-wrap;
+
+            overflow-y: auto;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="card">
+
+        <h2>Custom Events</h2>
+
+        <p class="info">
+
+            We will create our own
+            <b>userLoggedIn</b> event.
+
+            <br><br>
+
+            Click the button to dispatch the custom event.
+
+            The document will listen for it and receive
+            custom data through <b>event.detail</b>.
+
+        </p>
+
+
+        <div class="buttons">
+
+            <button id="loginBtn">
+                Simulate Login
+            </button>
+
+            <button id="cartBtn">
+                Update Cart
+            </button>
+
+            <button id="clearBtn">
+                Clear Log
+            </button>
+
+        </div>
+
+
+        <div id="log"></div>
+
+    </div>
+
+
+    <script>
+
+
+        const loginBtn = document.querySelector("#loginBtn");
+
+        const cartBtn = document.querySelector("#cartBtn");
+
+        const clearBtn = document.querySelector("#clearBtn");
+
+        const log = document.querySelector("#log");
+
+
+        // ==========================================
+        // Helper
+        // ==========================================
+
+        function print(text) {
+
+            log.innerHTML += text + "<br>";
+
+            log.scrollTop = log.scrollHeight;
+
+        }
+
+
+        // ==========================================
+        // LISTEN FOR CUSTOM EVENT
+        // ==========================================
+
+        document.addEventListener("userLoggedIn", (e) => {
+
+            print("🟢 userLoggedIn event received");
+
+            print(
+                "User ID: " +
+                e.detail.userId
+            );
+
+            print(
+                "Username: " +
+                e.detail.username
+            );
+
+            print(
+                "Role: " +
+                e.detail.role
+            );
+
+            print("-------------------------");
+
+        });
+
+
+        // ==========================================
+        // CREATE + DISPATCH CUSTOM EVENT
+        // ==========================================
+
+        loginBtn.addEventListener("click", () => {
+
+            print("Creating userLoggedIn event...");
+
+
+            const event = new CustomEvent(
+                "userLoggedIn",
+                {
+                    bubbles: true,
+
+                    cancelable: true,
+
+                    detail: {
+
+                        userId: 123,
+
+                        username: "Alex",
+
+                        role: "admin"
+
+                    }
+
+                }
+            );
+
+
+            // Send the event
+
+            document.dispatchEvent(event);
+
+        });
+
+
+        // ==========================================
+        // CART CUSTOM EVENT
+        // ==========================================
+
+        document.addEventListener("cart:updated", (e) => {
+
+            print("🛒 Cart updated");
+
+            print(
+                "Items: " +
+                e.detail.items
+            );
+
+            print(
+                "Total: $" +
+                e.detail.total
+            );
+
+            print("-------------------------");
+
+        });
+
+
+        cartBtn.addEventListener("click", () => {
+
+            const event = new CustomEvent(
+                "cart:updated",
+                {
+                    detail: {
+
+                        items: 3,
+
+                        total: 99.99
+
+                    }
+                }
+            );
+
+
+            document.dispatchEvent(event);
+
+        });
+
+
+        // ==========================================
+        // CLEAR
+        // ==========================================
+
+        clearBtn.addEventListener("click", () => {
+
+            log.innerHTML = "";
+
+        });
+
+
+    </script>
+
+
+</body>
+
+</html>
