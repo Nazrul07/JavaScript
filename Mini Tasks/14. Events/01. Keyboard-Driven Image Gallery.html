@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery — Keyboard & Touch</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0f1117;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 60px 16px;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        header {
+            margin-bottom: 28px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+
+        header p {
+            margin-top: 4px;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .explain {
+            background: #161a27;
+            border: 1px solid #2d3248;
+            border-left: 3px solid #4f9cf9;
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 0.825rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .explain b {
+            color: #e2e8f0;
+        }
+
+        /* ==================
+           Gallery
+        =================== */
+
+        #gallery {
+            background: #1e2130;
+            border: 1px solid #2d3248;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .display-wrap {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            touch-action: pan-y;
+            /* allow vertical scroll but capture horizontal swipe */
+        }
+
+        #display {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            display: block;
+            user-select: none;
+            -webkit-user-drag: none;
+
+            /* fade transition when src changes */
+            animation: fadeSwap 0.25s ease;
+        }
+
+        @keyframes fadeSwap {
+            from {
+                opacity: 0.3;
+                transform: scale(1.02);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Swipe hint arrows on the image itself (visual only) */
+        .swipe-hint {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.4rem;
+            pointer-events: none;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .swipe-hint.left {
+            left: 12px;
+        }
+
+        .swipe-hint.right {
+            right: 12px;
+        }
+
+        /* ==================
+           Counter + dots
+        =================== */
+
+        .meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        #counter {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #2d3248;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .dot:hover {
+            background: #3d4460;
+        }
+
+        .dot.active {
+            background: #4f9cf9;
+            transform: scale(1.3);
+        }
+
+        /* ==================
+           Buttons
+        =================== */
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        button.nav-btn {
+            flex: 1;
+            padding: 11px 0;
+            background: #252a3a;
+            border: 1px solid #2d3248;
+            border-radius: 8px;
+            color: #cbd5e1;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        button.nav-btn:hover {
+            background: #2d3348;
+            border-color: #4f9cf9;
+            color: #4f9cf9;
+        }
+
+        button.nav-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ==================
+           Log
+        =================== */
+
+        .log-card {
+            background: #1e2130;
+            border: 1px solid #2d3248;
+            border-radius: 12px;
+            padding: 18px 20px;
+        }
+
+        .log-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .clear-btn {
+            background: transparent;
+            border: none;
+            color: #4a5568;
+            font-size: 0.72rem;
+            cursor: pointer;
+            float: right;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .clear-btn:hover {
+            color: #94a3b8;
+        }
+
+        .log {
+            background: #0f1117;
+            border: 1px solid #2d3248;
+            border-radius: 8px;
+            padding: 10px 12px;
+            height: 110px;
+            overflow-y: auto;
+            font-size: 0.78rem;
+            font-family: 'Courier New', monospace;
+            color: #64748b;
+        }
+
+        .log .entry {
+            padding: 3px 0;
+        }
+
+        .log .key {
+            color: #4f9cf9;
+        }
+
+        .log .click {
+            color: #4ade80;
+        }
+
+        .log .swipe {
+            color: #fbbf24;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>Image Gallery</h1>
+            <p>Click buttons, use ← → keys, or swipe on mobile</p>
+        </header>
+
+        <div class="explain">
+            <b>Try it:</b> click Prev/Next, press your keyboard arrow keys, or
+            — on a touchscreen or with browser device emulation — swipe left/right
+            directly on the image.
+        </div>
+
+
+        <!-- ============================
+             GALLERY
+        ============================= -->
+        <div id="gallery">
+
+            <div class="display-wrap">
+                <img id="display" src="" alt="Gallery image">
+                <span class="swipe-hint left">‹</span>
+                <span class="swipe-hint right">›</span>
+            </div>
+
+            <div class="meta-row">
+                <p id="counter">1 / 5</p>
+                <div class="dots" id="dots"></div>
+            </div>
+
+            <div class="btn-row">
+                <button class="nav-btn" id="prev">← Prev</button>
+                <button class="nav-btn" id="next">Next →</button>
+            </div>
+
+        </div>
+
+
+        <!-- ========
+             Log
+        ========= -->
+        <div class="log-card">
+            <div class="log-title">
+                Event Log
+                <button class="clear-btn" id="clearLog">clear</button>
+            </div>
+            <div class="log" id="eventLog"></div>
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // =========================================================
+        //  Log Helper
+        // =========================================================
+
+        const eventLog = document.querySelector("#eventLog");
+
+        function print(message, type = "click") {
+            const entry = document.createElement("div");
+            entry.className = `entry ${type}`;
+            entry.textContent = `› ${message}`;
+            eventLog.appendChild(entry);
+            eventLog.scrollTop = eventLog.scrollHeight;
+        }
+
+        document.querySelector("#clearLog").addEventListener("click", () => {
+            eventLog.innerHTML = "";
+        });
+
+
+        // =========================================================
+        //  Placeholder Images
+        //  (inline SVG data URIs — so this file works standalone,
+        //  no real img1.jpg...img5.jpg files needed)
+        // =========================================================
+
+        function makePlaceholder(label, color) {
+            const svg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
+                    <rect width="600" height="400" fill="${color}"/>
+                    <text x="50%" y="50%" font-family="Arial" font-size="42"
+                          fill="rgba(255,255,255,0.85)" text-anchor="middle"
+                          dominant-baseline="middle">${label}</text>
+                </svg>`;
+            return "data:image/svg+xml;base64," + btoa(svg);
+        }
+
+        // This replaces the original ["img1.jpg", "img2.jpg", ...] array
+        // In your real project this would just be actual file paths
+        const images = [
+            makePlaceholder("Photo 1", "#4f9cf9"),
+            makePlaceholder("Photo 2", "#a78bfa"),
+            makePlaceholder("Photo 3", "#4ade80"),
+            makePlaceholder("Photo 4", "#fb923c"),
+            makePlaceholder("Photo 5", "#f87171"),
+        ];
+
+
+        // =========================================================
+        //  Core References & State
+        //  (identical structure to your original code)
+        // =========================================================
+
+        const display = document.querySelector("#display");
+        const counter = document.querySelector("#counter");
+        const dotsContainer = document.querySelector("#dots");
+
+        let current = 0;   // index of the currently shown image
+
+
+        // =========================================================
+        //  Build Dot Indicators (extra addition — click to jump)
+        // =========================================================
+
+        images.forEach((_, index) => {
+            const dot = document.createElement("span");
+            dot.className = "dot";
+            dot.addEventListener("click", () => {
+                print(`dot ${index + 1} clicked`, "click");
+                showImage(index);
+            });
+            dotsContainer.appendChild(dot);
+        });
+
+
+        // =========================================================
+        //  showImage — the single function that updates everything
+        // =========================================================
+
+        function showImage(index) {
+
+            // The modulo wrap-around trick:
+            // (index + images.length) % images.length
+            //
+            // Why add images.length BEFORE the modulo?
+            // JS's % can return NEGATIVE numbers for negative inputs.
+            // Example: -1 % 5 = -1 in JS (NOT 4, unlike some languages' behavior expectations)
+            // Adding images.length first shifts it into positive range safely.
+            current = (index + images.length) % images.length;
+
+            display.src = images[current];
+            counter.textContent = `${current + 1} / ${images.length}`;
+
+            // Re-trigger the fade animation on every image change
+            display.style.animation = "none";
+            void display.offsetWidth;   // force reflow — restarts the animation
+            display.style.animation = "";
+
+            // Update active dot
+            document.querySelectorAll(".dot").forEach((dot, i) => {
+                dot.classList.toggle("active", i === current);
+            });
+        }
+
+
+        // =========================================================
+        //  Button Clicks
+        // =========================================================
+
+        document.querySelector("#prev").addEventListener("click", () => {
+            print("Prev button clicked", "click");
+            showImage(current - 1);
+        });
+
+        document.querySelector("#next").addEventListener("click", () => {
+            print("Next button clicked", "click");
+            showImage(current + 1);
+        });
+
+
+        // =========================================================
+        //  Keyboard Navigation
+        // =========================================================
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft") {
+                print("ArrowLeft pressed", "key");
+                showImage(current - 1);
+            }
+            if (e.key === "ArrowRight") {
+                print("ArrowRight pressed", "key");
+                showImage(current + 1);
+            }
+        });
+
+
+        // =========================================================
+        //  Touch Swipe Support
+        // =========================================================
+
+        let touchStartX = 0;
+
+        display.addEventListener("touchstart", (e) => {
+            // e.touches[0] = the first finger touching the screen
+            // clientX = horizontal pixel position of that touch
+            touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+        // passive: true tells the browser "I will NOT call preventDefault()
+        // in this listener" — lets the browser optimize scrolling performance
+        // immediately instead of waiting to see if you'll block it.
+
+        display.addEventListener("touchend", (e) => {
+
+            // changedTouches = fingers that were just lifted off the screen
+            const diff = touchStartX - e.changedTouches[0].clientX;
+
+            // diff > 0  → finger moved LEFT   (start X was bigger than end X) → swipe left  → next image
+            // diff < 0  → finger moved RIGHT  (start X was smaller than end X) → swipe right → prev image
+
+            if (Math.abs(diff) > 50) {   // minimum swipe distance — ignore tiny accidental drags
+                print(`swiped ${diff > 0 ? "left" : "right"} (${Math.abs(diff).toFixed(0)}px)`, "swipe");
+                diff > 0 ? showImage(current + 1) : showImage(current - 1);
+            }
+        });
+
+
+        // =========================================================
+        //  Init
+        // =========================================================
+
+        showImage(0);   // load the first image on page load
+
+    </script>
+
+</body>
+
+</html>

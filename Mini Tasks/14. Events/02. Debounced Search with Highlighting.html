@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debounced Search with Highlighting</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0f1117;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 60px 16px;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        header {
+            margin-bottom: 28px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+
+        header p {
+            margin-top: 4px;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .explain {
+            background: #161a27;
+            border: 1px solid #2d3248;
+            border-left: 3px solid #4f9cf9;
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 0.825rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .explain b {
+            color: #e2e8f0;
+        }
+
+        .explain kbd {
+            background: #252a3a;
+            border: 1px solid #3d4460;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 0.75rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ==================
+           Search Box
+        =================== */
+
+        .search-wrap {
+            position: relative;
+            margin-bottom: 4px;
+        }
+
+        #search {
+            width: 100%;
+            padding: 13px 16px;
+            background: #1e2130;
+            border: 1px solid #2d3248;
+            border-radius: 10px;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        #search::placeholder {
+            color: #4a5568;
+        }
+
+        #search:focus {
+            border-color: #4f9cf9;
+        }
+
+        /* small debounce indicator dot */
+        .pending-dot {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #fbbf24;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .pending-dot.active {
+            opacity: 1;
+            animation: pulse 0.6s ease infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: translateY(-50%) scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: translateY(-50%) scale(0.7);
+            }
+        }
+
+        .meta-line {
+            font-size: 0.75rem;
+            color: #4a5568;
+            margin: 8px 2px 18px;
+            min-height: 16px;
+        }
+
+        /* ==================
+           Results List
+        =================== */
+
+        #results {
+            list-style: none;
+            background: #1e2130;
+            border: 1px solid #2d3248;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        #results li {
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            border-bottom: 1px solid #1a1f2e;
+            cursor: pointer;
+            transition: background 0.12s;
+        }
+
+        #results li:last-child {
+            border-bottom: none;
+        }
+
+        #results li:hover {
+            background: #252a3a;
+        }
+
+        /* Active = keyboard-selected via arrow keys */
+        #results li.active {
+            background: #1a2d45;
+            color: #f1f5f9;
+        }
+
+        #results li.no-results {
+            color: #4a5568;
+            cursor: default;
+        }
+
+        #results li.no-results:hover {
+            background: transparent;
+        }
+
+        mark {
+            background: #4f9cf9;
+            color: #fff;
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+
+        #results li.active mark {
+            background: #60a5fa;
+        }
+
+        /* ==================
+           Log
+        =================== */
+
+        .log-card {
+            background: #1e2130;
+            border: 1px solid #2d3248;
+            border-radius: 12px;
+            padding: 18px 20px;
+        }
+
+        .log-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .clear-btn {
+            background: transparent;
+            border: none;
+            color: #4a5568;
+            font-size: 0.72rem;
+            cursor: pointer;
+            float: right;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .clear-btn:hover {
+            color: #94a3b8;
+        }
+
+        .log {
+            background: #0f1117;
+            border: 1px solid #2d3248;
+            border-radius: 8px;
+            padding: 10px 12px;
+            height: 120px;
+            overflow-y: auto;
+            font-size: 0.78rem;
+            font-family: 'Courier New', monospace;
+            color: #64748b;
+        }
+
+        .log .entry {
+            padding: 3px 0;
+        }
+
+        .log .fire {
+            color: #4ade80;
+        }
+
+        .log .nav {
+            color: #4f9cf9;
+        }
+
+        .log .pick {
+            color: #fbbf24;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>Debounced Search</h1>
+            <p>Live search with highlighting and keyboard navigation</p>
+        </header>
+
+        <div class="explain">
+            Type to search — results wait <b>300ms</b> after you stop typing.
+            Use <kbd>↑</kbd> <kbd>↓</kbd> to move through results,
+            <kbd>Enter</kbd> to select.
+        </div>
+
+
+        <!-- ============================
+             SEARCH — same structure as your code
+        ============================= -->
+        <div class="search-wrap">
+            <input id="search" placeholder="Search languages..." autocomplete="off">
+            <span class="pending-dot" id="pendingDot"></span>
+        </div>
+
+        <p class="meta-line" id="metaLine"></p>
+
+        <ul id="results"></ul>
+
+
+        <!-- ========
+             Log
+        ========= -->
+        <div class="log-card">
+            <div class="log-title">
+                Event Log
+                <button class="clear-btn" id="clearLog">clear</button>
+            </div>
+            <div class="log" id="eventLog"></div>
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // =========================================================
+        //  Log Helper
+        // =========================================================
+
+        const eventLog = document.querySelector("#eventLog");
+
+        function print(message, type = "fire") {
+            const entry = document.createElement("div");
+            entry.className = `entry ${type}`;
+            entry.textContent = `› ${message}`;
+            eventLog.appendChild(entry);
+            eventLog.scrollTop = eventLog.scrollHeight;
+        }
+
+        document.querySelector("#clearLog").addEventListener("click", () => {
+            eventLog.innerHTML = "";
+        });
+
+
+        // =========================================================
+        //  THE DEBOUNCE FUNCTION
+        //  (same one from your earlier notes — reused here)
+        // =========================================================
+
+        function debounce(fn, delay) {
+            let timer;
+            return function (...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    fn.apply(this, args);
+                }, delay);
+            };
+        }
+
+
+        // =========================================================
+        //  Data
+        // =========================================================
+
+        const languages = [
+            "JavaScript", "TypeScript", "Python", "Java",
+            "C++", "C#", "Go", "Rust", "Swift", "Kotlin"
+        ];
+
+
+        // =========================================================
+        //  Element References
+        // =========================================================
+
+        const searchInput = document.querySelector("#search");
+        const results = document.querySelector("#results");
+        const pendingDot = document.querySelector("#pendingDot");
+        const metaLine = document.querySelector("#metaLine");
+
+
+        // =========================================================
+        //  Highlight — wraps the matched substring in <mark>
+        // =========================================================
+
+        function highlight(text, query) {
+            if (!query) return text;
+
+            // Build a case-insensitive, global regex from the query
+            const regex = new RegExp(`(${query})`, "gi");
+
+            // $1 = whatever text was actually matched (preserves original casing)
+            return text.replace(regex, "<mark>$1</mark>");
+        }
+
+
+        // =========================================================
+        //  renderResults — rebuilds the <ul> based on the query
+        // =========================================================
+
+        function renderResults(query) {
+
+            const filtered = query
+                ? languages.filter(l => l.toLowerCase().includes(query.toLowerCase()))
+                : languages;
+
+            results.innerHTML = filtered.length
+                ? filtered.map(l => `<li>${highlight(l, query)}</li>`).join("")
+                : `<li class="no-results">No results found</li>`;
+
+            // Hide the pending indicator now that results are in
+            pendingDot.classList.remove("active");
+
+            metaLine.textContent = query
+                ? `${filtered.length} match${filtered.length !== 1 ? "es" : ""} for "${query}"`
+                : `Showing all ${languages.length} languages`;
+
+            print(`rendered ${filtered.length} result(s) for "${query}"`, "fire");
+        }
+
+
+        // =========================================================
+        //  Debounced Search — wires input to renderResults
+        // =========================================================
+
+        const debouncedSearch = debounce((query) => renderResults(query), 300);
+
+        searchInput.addEventListener("input", (e) => {
+            const query = e.target.value.trim();
+
+            // Show the pending dot immediately — visual proof that
+            // typing is being "held" while the debounce timer runs
+            pendingDot.classList.add("active");
+
+            debouncedSearch(query);
+        });
+
+
+        // =========================================================
+        //  Keyboard Navigation Through Results
+        // =========================================================
+
+        searchInput.addEventListener("keydown", (e) => {
+
+            const items = results.querySelectorAll("li:not(.no-results)");
+            const active = results.querySelector("li.active");
+
+            // Spread NodeList into a real array so .indexOf works
+            let index = [...items].indexOf(active);
+
+            if (e.key === "ArrowDown") {
+                e.preventDefault();   // stop cursor from jumping to end of input text
+                if (active) active.classList.remove("active");
+
+                // Math.min caps the index so it never goes past the last item
+                const next = items[Math.min(index + 1, items.length - 1)];
+                next?.classList.add("active");
+                next?.scrollIntoView({ block: "nearest" });
+
+                print(`ArrowDown → highlighted "${next?.textContent ?? "none"}"`, "nav");
+            }
+
+            if (e.key === "ArrowUp") {
+                e.preventDefault();
+                if (active) active.classList.remove("active");
+
+                // Math.max caps the index so it never goes below the first item
+                const prevItem = items[Math.max(index - 1, 0)];
+                prevItem?.classList.add("active");
+                prevItem?.scrollIntoView({ block: "nearest" });
+
+                print(`ArrowUp → highlighted "${prevItem?.textContent ?? "none"}"`, "nav");
+            }
+
+            if (e.key === "Enter" && active) {
+                searchInput.value = active.textContent;
+                results.innerHTML = "";
+                metaLine.textContent = `Selected "${active.textContent}"`;
+                print(`Enter → selected "${active.textContent}"`, "pick");
+            }
+        });
+
+
+        // =========================================================
+        //  Init
+        // =========================================================
+
+        renderResults("");
+
+    </script>
+
+</body>
+
+</html>
