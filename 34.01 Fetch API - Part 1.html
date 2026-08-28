@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fetch API - Part 1</title>
+</head>
+
+<body>
+
+    <button id="btn">Fetch Users</button>
+
+    <script>
+        const btn = document.querySelector("#btn");
+
+        btn.addEventListener("click", () => {
+
+            console.log("1. Before fetch");
+
+            const result = fetch(
+                "https://jsonplaceholder.typicode.com/users"
+            );
+
+            console.log("2. After fetch");
+
+            console.log("3. Result:", result);
+        });
+    </script>
+
+</body>
+
+</html>
