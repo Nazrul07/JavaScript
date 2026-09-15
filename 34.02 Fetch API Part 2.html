@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fetch API Part 2</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            display: flex;
+            justify-content: center;
+            padding-top: 50px;
+        }
+
+        .card {
+            width: 500px;
+            padding: 25px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        #log {
+            white-space: pre-wrap;
+            margin-top: 20px;
+            padding: 15px;
+            background: #111;
+            color: #00ff88;
+            min-height: 100px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <button id="btn">Load Users</button>
+
+        <div id="log"></div>
+
+    </div>
+
+    <script>
+
+        const btn = document.querySelector("#btn");
+        const log = document.querySelector("#log");
+
+        btn.addEventListener("click", () => {
+
+            fetch("https://jsonplaceholder.typicode.com/users")
+
+                .then(response => {
+
+                    return response.json();
+
+                })
+
+                .then(data => {
+
+                    console.log(data);
+
+                    // For our playground
+                    log.textContent = data
+                        .map(user => user.name)
+                        .join("\n");
+
+
+                    log.textContent += "\n\n" + data
+                        .map(user => user.name + " - " + user.email)
+                        .join("\n");
+                    log.textContent += "\n\n";
+
+                    // For console
+                    for(let i=0 ; i<data.length ; i++){
+                        console.log(data[i].name, " - ", data[i].email);
+                    }
+                });
+
+        });
+
+    </script>
+
+</body>
+
+</html>
