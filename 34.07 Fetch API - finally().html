@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fetch API - finally()</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            width: 600px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+        }
+
+        button {
+            padding: 10px 15px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        #loading {
+            margin-top: 15px;
+            display: none;
+        }
+
+        #log {
+            margin-top: 20px;
+            background: #222;
+            color: #00ff66;
+            min-height: 180px;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>Fetch API</h2>
+
+        <button id="successBtn">
+            Successful Request
+        </button>
+
+        <button id="errorBtn">
+            Failed Request
+        </button>
+
+        <div id="loading">
+            Loading...
+        </div>
+
+        <div id="log"></div>
+
+    </div>
+
+    <script>
+
+        const loading = document.querySelector("#loading");
+        const log = document.querySelector("#log");
+
+        function loadUsers(url) {
+
+            log.textContent = "";
+            loading.style.display = "block";
+
+            fetch(url)
+
+                .then(response => {
+
+                    if (!response.ok) {
+                        throw new Error("HTTP error, status = " + response.status);
+                    }
+
+                    return response.json();
+                })
+
+                .then(data => {
+
+                    log.textContent =
+                        "Users loaded: " + data.length;
+
+                })
+
+                .catch(error => {
+
+                    log.textContent =
+                        "Error: " + error.message;
+
+                })
+
+                .finally(() => {
+
+                    loading.style.display = "none";
+
+                });
+        }
+
+
+        document.querySelector("#successBtn")
+            .addEventListener("click", () => {
+
+                loadUsers(
+                    "https://jsonplaceholder.typicode.com/users"
+                );
+
+            });
+
+
+        document.querySelector("#errorBtn")
+            .addEventListener("click", () => {
+
+                loadUsers(
+                    "https://jsonplaceholder.typicode.com/abc"
+                );
+
+            });
+
+    </script>
+
+</body>
+
+</html>

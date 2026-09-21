@@ -1,0 +1,84 @@
+Sending Data to a Server with POST
+fetch(url) - by defualt fetch() usrs GET method to send a request to the server
+
+
+For example:
+
+User registration → send user information
+Login → send email/password
+Contact form → send message
+Creating a product → send product information
+Creating a post → send post data
+
+
+***GET Vs POST
+
+GET  → "Server, give me some data."
+POST → "Server, here is some data."
+
+fetch("/users");     -> give me the users
+
+POST method ->
+fetch("/users", {
+    method: "POST",
+    body: ...
+});
+
+
+
+***How do we tell Fetch to use POST?
+-> The second argument of fetch() is an options object.
+
+fetch(url, {
+    method: "POST"      -> this is the important part here.
+});
+
+
+
+*** Sending JSON data
+
+Let we want to send this JavaScript object:
+const user = {
+    name: "Nazrul",
+    email: "nazrul104n@example.com"
+};
+
+body: user   -> can't simply do that
+because HTTP request bodies commonly need to be sent in a specific format.
+
+For a JSON API, we convert the JavaScript object into a JSON string: JSON.stringify(user)
+fetch(url, {
+    method: "POST",
+    body: JSON.stringify(user)
+});
+
+Direction flow:
+JavaScript object
+       ↓
+JSON.stringify()
+       ↓
+JSON string
+       ↓
+HTTP request body
+       ↓
+Server
+
+
+
+
+*** Why do we need Content-Type?
+-> We should also tell the server: "The data I'm sending is JSON."
+
+We do that using headers: 
+headers: {
+    "Content-Type": "application/json"
+}
+
+Basic JSON POST request looks like:
+fetch(url, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(user)
+})
