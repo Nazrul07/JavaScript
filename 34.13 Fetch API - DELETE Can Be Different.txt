@@ -1,0 +1,32 @@
+Not every successful HTTP request necessarily gives us JSON data.
+
+For example, a server may respond to a DELETE request with: 204 No Content
+Means: The operation succeeded, but there is no response body.
+
+So, in this situation, blindly doing: return JSON.response(); may fail because there is nothing to parse.
+
+For example:
+
+fetch("/users/5", {
+    method: "DELETE"
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+    }
+
+    if (response.status === 204) {
+        return;
+    }
+
+    return response.json();
+})
+.then(data => {
+    console.log("Deleted successfully");
+})
+.catch(error => {
+    console.log(error.message);
+});
+
+
+A successful HTTP response does not always contain JSON data.

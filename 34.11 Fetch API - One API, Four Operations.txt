@@ -1,0 +1,33 @@
+Let: /users/5 -> represents user #5.
+
+We could have:
+
+Get user:
+fetch("/users/5");
+
+Create user:
+fetch("/users", {
+    method: "POST",
+    ...
+});
+
+Update user:
+fetch("/users/5", {
+    method: "PUT",
+    ...
+});
+
+
+Partially update user:
+fetch("/users/5", {
+    method: "PATCH",
+    ...
+});
+
+
+Delete user:
+fetch("/users/5", {
+    method: "DELETE"
+});
+
+The URL and HTTP method work together to describe what we're asking the server to do.

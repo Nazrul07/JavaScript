@@ -1,0 +1,71 @@
+GET     → Get users
+POST    → Create a user
+PUT     → Replace/update a user
+PATCH   → Partially update a user
+DELETE  → Delete a user
+
+
+1. PUT — Update/Replace Data
+
+Let we have,
+
+const user = {
+    name: "Nazrul",
+    email: "nazrul104n@example.com"
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: {
+        "Content-Type" : "application/json"
+    },
+    body: JSON.stringify(user)
+});
+
+PUT → "Replace/update this resource with this data."
+
+
+
+
+2. PATCH — Partially Update Data
+
+Let we have,
+
+const user = {
+    name: "Nazrul",
+    email: "old@example.com",
+    age: 25
+}
+
+but we only want to change the gmail. With PATCH:
+
+const update = {
+    email: "nazrul104n@gmail.com"
+};
+
+fetch(url, {
+    method: "PATCH",
+    headers: {
+        "Content-Type" : "application/json"
+    },
+    body: JSON.stringify(update)
+})
+
+
+PATCH → "Change only this part."
+
+
+
+
+
+3. DELETE — Delete Data
+Let we want to delete a user
+
+fetch("https://example.com/users/5", {
+    method: "DELETE"
+});
+
+that's it.
+Usually, We don't need a request body for a basic DELETE request.
+
+DELETE → "Remove this resource."
