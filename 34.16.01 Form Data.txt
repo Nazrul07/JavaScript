@@ -1,0 +1,125 @@
+*** Why is FormData useful?
+
+One major reason is file uploads.
+
+Suppose a profile page has: <input type="file" id="avatar">
+
+We can put the file into FormData:
+
+const fileInput = document.querySelector("#avatar");
+
+const formData = new FormData();
+
+formData.append("avatar", fileInput.files[0]);
+
+
+Now:
+fetch("/profile/avatar", {
+    method: "POST",
+    body: formData
+});
+
+can send the file to the server.
+
+
+FormData
+   ↓
+text fields
++
+files
+   ↓
+HTTP request
+   ↓
+server
+
+
+This is something JSON by itself doesn't handle in the same direct browser form.
+
+
+
+
+*** FormData.append()
+
+We can manually add values too:
+
+const formData = new FormData();
+
+formData.append("username", "Nazrul");
+formData.append("email", "nazrul104n@gmail.com");
+
+
+
+*** FormData vs JSON
+
+- JSON
+
+const user = {
+    username: "Nazrul",
+    email: "nazrul104n@gmail.com"
+};
+
+fetch("/users", {
+    method: "POST",
+
+    headers: {
+        "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify(user)
+});
+
+JS object
+   ↓
+JSON.stringify()
+   ↓
+JSON string
+   ↓
+server
+
+
+
+- FormData
+
+const formData = new FormData();
+
+formData.append("username", "Nazrul");
+formData.append("email", "nazrul104n@gmail.com");
+
+fetch("/users", {
+    method: "POST",
+    body: formData
+});
+
+Form fields / files
+       ↓
+   FormData
+       ↓
+   request body
+       ↓
+     server
+
+
+
+
+*** Important: Don't Manually Set Content-Type
+
+With JSON, we normally do:
+
+headers: {
+    "Content-Type": "application/json"
+}
+
+But with FormData, don't manually set:
+
+headers: {
+    "Content-Type": "multipart/form-data"
+}
+
+Insted: 
+
+fetch("/upload", {
+    method: "POST",
+    body: formData
+});
+
+- The browser handles the appropriate Content-Type and boundary information for the FormData request.

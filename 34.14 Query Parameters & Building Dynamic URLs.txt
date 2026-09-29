@@ -1,0 +1,155 @@
+How to send search/filter information through the URL.
+
+For example:
+
+Search for users
+Filter products
+Get posts for a specific user
+Pagination
+Sorting
+Filtering by category
+
+
+
+1. What are Query Parameters?
+
+Let an API has this URL: https://example.com/users
+-> We want to tell the server: "Give me users whose name is Nazrul."
+
+We can add information to the URL: https://example.com/users?name=Nazrul
+-> The part after ? is called a query parameter. Here name = Nazrul is the query parameter.
+
+
+
+2. Multiple Query Parameters
+
+We can send multiple parameters.
+-> https://example.com/products?category=phone&sort=price
+
+Here,
+category = phone 
+sort = price
+
+The first parameter start with - ?
+Additional parameters are separated by - &
+
+So, ?category=phone&sort=price means
+category → phone
+sort     → price
+
+
+
+3. Using Query Parameters with Fetch
+
+We can simply put the URL into fetch():
+
+fetch("https://example.com/users?name=Nazrul")
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+
+The browser sends a request to that exact URL.
+
+
+
+4. Why Is This Useful?
+
+Imagine an e-commerce website.
+
+The user selects:
+
+Category: Laptop
+Price: Low to High
+Page: 2
+
+The frontend could request:
+/products?category=laptop&sort=price_asc&page=2
+
+The server reads those parameters and returns the appropriate products.
+
+So instead of downloading every product and filtering everything in JavaScript,
+we can ask the server for exactly what we need.
+
+
+5. Dynamic Query Parameters
+
+Usually, the values aren't hardcoded.
+
+Let
+
+const search = "laptop";
+
+We can build:
+
+const url = `https://example.com/products?search=${search}`;
+
+fetch(url);
+
+The resulting URL becomes: https://example.com/products?search=laptop
+
+But there is a problem.
+
+
+
+6. What If the User Types Special Characters?
+
+Suppose the user searches: red shoes, C++, phone & charger
+
+putting user's input directly into a URL can cause problem because characters such as:
+- space
+- &
+- ?
+- =
+have special meanings in URLs.
+
+That's why JavaScript provides: encodeURIComponent()
+
+For example:
+
+const search = "phone & charger";
+
+const url =
+    `https://example.com/products?search=${encodeURIComponent(search)}`;
+
+console.log(url);
+
+This safely encodes the user's search value for use inside a URL.
+
+So, encodeURIComponent() safely encodes a value that we're putting into a URL.
+
+
+
+
+7. A Better Way: URLSearchParams
+
+JavaScript also provides a cleaner way to construct query parameters:
+
+const params = new URLSearchParams({
+    search: "laptop",
+    category: "electronics",
+    page: "2"
+});
+
+console.log(params.toString());
+
+It produces something like: search=laptop&category=electronics&page=2
+
+Then:
+
+const url = `https://example.com/products?${params}`;
+fetch(url);
+
+so the complete ideas:
+
+JavaScript values
+       ↓
+URLSearchParams
+       ↓
+query string
+       ↓
+URL
+       ↓
+fetch()
+       ↓
+server

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FormData + Fetch Playground</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: #eef2f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            width: 760px;
+
+            background: white;
+            padding: 25px;
+
+            border-radius: 10px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+
+            font-size: 16px;
+
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 12px;
+
+            border: none;
+            border-radius: 6px;
+
+            background: #333;
+            color: white;
+
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        #log {
+            margin-top: 20px;
+
+            background: #222;
+            color: #00ff66;
+
+            min-height: 180px;
+            padding: 15px;
+
+            border-radius: 8px;
+
+            font-family: monospace;
+
+            white-space: pre-wrap;
+
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>Profile Upload</h2>
+
+        <form id="profileForm">
+
+            <input name="username" placeholder="Username" required>
+
+            <input name="email" type="email" placeholder="Email" required>
+
+            <input name="avatar" type="file">
+
+            <button type="submit">
+                Save Profile
+            </button>
+
+        </form>
+
+        <div id="log">
+            Fill out the form and click "Save Profile".
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const form = document.querySelector("#profileForm");
+        const log = document.querySelector("#log");
+
+
+        form.addEventListener("submit", event => {
+
+            // Prevent the browser from
+            // submitting/reloading the page normally.
+            event.preventDefault();
+
+
+            // Create FormData from the form.
+            const formData = new FormData(form);
+
+
+            // Let's see what is inside FormData.
+            console.log("FormData contents:");
+
+            for (const [key, value] of formData.entries()) {
+
+                console.log(key, ":", value);
+            }
+
+
+            // Show loading message.
+            log.textContent = "Saving profile...";
+
+
+            fetch("https://httpbin.org/post", {
+
+                method: "POST",
+
+                // FormData automatically creates
+                // the correct multipart/form-data request.
+                body: formData
+
+            })
+
+                .then(response => {
+
+                    // Check whether the HTTP request succeeded.
+                    if (!response.ok) {
+
+                        throw new Error(
+                            `HTTP Error: ${response.status}`
+                        );
+                    }
+
+
+                    // Convert response body into JavaScript data.
+                    return response.json();
+                })
+
+                .then(data => {
+
+                    console.log("Server response:", data);
+
+
+                    // Get the values that were sent.
+                    const formDataReceived = data.form;
+
+
+                    // Display the result.
+                    log.textContent =
+                        "Profile saved successfully!\n\n" +
+
+                        `Username: ${formDataReceived.username}\n` +
+
+                        `Email: ${formDataReceived.email}\n\n` +
+
+                        "The form data was successfully sent to the server.";
+                })
+
+                .catch(error => {
+
+                    console.log("Error:", error.message);
+
+                    log.textContent =
+                        `Error: ${error.message}`;
+                });
+
+        });
+
+    </script>
+
+</body>
+
+</html>
+
+
+<!--
+
+                 SEND DATA
+                    │
+          ┌─────────┴─────────┐
+          │                   │
+        JSON               FormData
+          │                   │
+    JSON.stringify()      form fields
+          │                + files
+          │                   │
+          └─────────┬─────────┘
+                    ↓
+                 Fetch
+                    ↓
+                  Server
+ 
+-->

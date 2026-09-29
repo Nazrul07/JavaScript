@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fetch API - URLSearchParams Playground</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: #eef2f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            width: 760px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .search-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        #search {
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        #btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #333;
+            color: white;
+        }
+
+        #btn:hover {
+            background: #555;
+        }
+
+        #log {
+            margin-top: 20px;
+
+            background: #222;
+            color: #00ff66;
+
+            min-height: 180px;
+            padding: 15px;
+            border-radius: 8px;
+
+            font-family: monospace;
+
+            /* Important:
+               Makes \n appear as actual new lines */
+            white-space: pre-wrap;
+
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>Search Products</h2>
+
+        <div class="search-area">
+            <input id="search" placeholder="Search products">
+
+            <button id="btn">
+                Search
+            </button>
+        </div>
+
+        <div id="log">
+            Enter a search term and click Search.
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const searchInput = document.querySelector("#search");
+        const btn = document.querySelector("#btn");
+        const log = document.querySelector("#log");
+
+
+        btn.addEventListener("click", () => {
+
+            // Get what the user typed
+            const searchValue = searchInput.value;
+
+            // Create URL query parameters
+            const params = new URLSearchParams({
+                search: searchValue
+            });
+
+            // For demonstration, we use JSONPlaceholder.
+            // It doesn't actually search products, but it accepts
+            // query parameters and returns JSON data.
+            const url =
+                `https://jsonplaceholder.typicode.com/users?${params}`;
+
+            // Show the URL we are requesting
+            log.textContent =
+                `Request URL:\n${url}\n\nLoading...`;
+
+
+            fetch(url)
+
+                .then(response => {
+
+                    // Check HTTP status
+                    if (!response.ok) {
+                        throw new Error(
+                            `HTTP Error: ${response.status}`
+                        );
+                    }
+
+                    // Convert response body into JavaScript data
+                    return response.json();
+                })
+
+                .then(data => {
+
+                    console.log(data);
+
+                    // Display the users
+                    log.textContent = 
+                        `Search: ${searchValue}\n\n` +
+
+                        data.map(
+                            user => `${user.name} - ${user.email}`
+                        ).join('\n');
+                })
+
+                .catch(error => {
+
+                    console.log(error.message);
+
+                    log.textContent =
+                        `Error: ${error.message}`;
+                });
+
+        });
+
+    </script>
+
+</body>
+
+</html>

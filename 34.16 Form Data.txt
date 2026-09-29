@@ -1,0 +1,49 @@
+FormData — Sending Form Data to a Server
+
+In real web applications, users often submit HTML forms:
+
+- Registration forms
+- Login forms
+- Contact forms
+- Profile forms
+- File upload forms
+
+For these situations, JavaScript provides FormData.
+
+
+FormData is a browser API that lets us collect form fields and prepare them to be sent to a server.
+
+Supporse we have:
+
+<form id="userForm">
+    <input name="username" value="Nazrul">
+    <input name="email" value="nazrul@example.com">
+
+    <button type="submit">Submit</button>
+</form>
+
+We can get the form:
+
+const form = document.querySelector(#userForm);
+
+Then create a FormData object:
+
+const formData = new FormData(form);
+
+now formData contains:
+
+username → Nazrul
+email    → nazrul@example.com
+
+
+
+Sending FormData with Fetch
+
+We can directly use it as request body,
+
+fetch("/users", {
+    method: "POST",
+    body: formData
+});
+
+One more thing, we don't need JSON.stringify(formData). For form data we simply just body: formData.
