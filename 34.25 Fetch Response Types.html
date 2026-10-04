@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fetch Response Types</title>
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #eef2f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            width: 760px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+        }
+
+        #log {
+            margin-top: 20px;
+            background: #222;
+            color: #00ff66;
+            min-height: 180px;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h2>Fetch Response Types</h2>
+
+        <div id="log"></div>
+    </div>
+
+    <script>
+
+        const log = document.querySelector("#log");
+
+        fetch("https://jsonplaceholder.typicode.com/users")
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const contentType =
+                    response.headers.get("Content-Type");
+
+                log.textContent =
+                    `Content-Type: ${contentType}\n\n`;
+
+                return response.json();
+            })
+            .then(data => {
+
+                log.textContent +=
+                    `First user:\n${data[0].name}`;
+            })
+            .catch(error => {
+
+                log.textContent =
+                    `Error: ${error.message}`;
+            });
+
+    </script>
+
+</body>
+
+</html>

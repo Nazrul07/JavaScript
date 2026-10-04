@@ -1,0 +1,76 @@
+*** .get() on Headers
+
+The headers property gives us a Headers object.
+
+To retrieve a particular header: response.headers.get("Content-Type")
+
+
+
+The pattern is:
+
+response
+   ↓
+headers
+   ↓
+get("Header-Name")
+   ↓
+header value
+
+For example: const type = response.headers.get("Content-Type");
+
+
+
+
+*** Checking Whether a Header Exists
+
+We can also use: response.headers.has("Content-Type")
+
+It returns: true or false
+
+
+For example: 
+
+if (response.headers.has("Content-Type")) {
+    console.log("Server sent a Content-Type header.");
+}
+
+So:
+
+get()
+→ give me the value
+
+has()
+→ does this header exist?
+
+
+
+*** Request Headers vs Response Headers
+
+We've already used request headers:
+
+fetch(url, {
+    method: "POST",
+
+    headers: {
+        "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify(user)
+});
+
+These headers go:
+
+JavaScript
+   ↓
+Request
+   ↓
+Server
+
+They tell the server information about what we're sending.
+
+
+REQUEST HEADERS
+→ Client → Server
+
+RESPONSE HEADERS
+→ Server → Client

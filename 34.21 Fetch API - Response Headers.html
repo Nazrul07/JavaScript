@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fetch API - Response Headers</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: #eef2f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            width: 760px;
+
+            background: white;
+            padding: 25px;
+
+            border-radius: 10px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        button {
+            padding: 12px 20px;
+
+            border: none;
+            border-radius: 6px;
+
+            background: #333;
+            color: white;
+
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        #log {
+            margin-top: 20px;
+
+            background: #222;
+            color: #00ff66;
+
+            min-height: 250px;
+            padding: 15px;
+
+            border-radius: 8px;
+
+            font-family: monospace;
+
+            white-space: pre-wrap;
+
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>Fetch API - Response Headers</h2>
+
+        <button id="btn">
+            Fetch Users
+        </button>
+
+        <div id="log">
+            Click "Fetch Users" to make the request.
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const btn = document.querySelector("#btn");
+        const log = document.querySelector("#log");
+
+
+        btn.addEventListener("click", () => {
+
+            log.textContent = "Sending request...";
+
+
+            fetch("https://jsonplaceholder.typicode.com/users")
+
+                .then(response => {
+
+                    console.log("Response object:", response);
+
+
+                    // Check whether HTTP request succeeded.
+                    if (!response.ok) {
+
+                        throw new Error(
+                            `HTTP Error: ${response.status}`
+                        );
+                    }
+
+
+                    // Get the Content-Type response header.
+                    const contentType =
+                        response.headers.get("Content-Type");
+
+
+                    console.log(
+                        "Content-Type:",
+                        contentType
+                    );
+
+
+                    // Display header information.
+                    log.textContent =
+                        `HTTP Status: ${response.status}\n` +
+                        `OK: ${response.ok}\n` +
+                        `Content-Type: ${contentType}\n\n` +
+                        `Reading response body...`;
+
+
+                    // Convert response body from JSON
+                    // into a JavaScript object/array.
+                    return response.json();
+                })
+
+
+                .then(data => {
+
+                    console.log("Users:", data);
+
+
+                    // Display users.
+                    log.textContent +=
+                        "\n\nUsers:\n\n" +
+
+                        data.map(user =>
+                                `${user.name} - ${user.email}`
+                            ).join("\n");
+                })
+
+
+                .catch(error => {
+
+                    console.log(
+                        "Error:",
+                        error.message
+                    );
+
+
+                    log.textContent =
+                        `Error: ${error.message}`;
+                })
+
+
+                .finally(() => {
+
+                    console.log("Request finished");
+
+                    console.log(
+                        "The request is completely finished."
+                    );
+                });
+
+        });
+
+    </script>
+
+</body>
+
+</html>
