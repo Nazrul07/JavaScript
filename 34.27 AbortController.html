@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fetch API - AbortController</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: #eef2f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            width: 760px;
+
+            background: white;
+            padding: 25px;
+
+            border-radius: 10px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 12px 20px;
+
+            border: none;
+            border-radius: 6px;
+
+            background: #333;
+            color: white;
+
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        #cancelBtn {
+            background: #b22222;
+        }
+
+        #cancelBtn:hover {
+            background: #d33;
+        }
+
+        #log {
+            margin-top: 20px;
+
+            background: #222;
+            color: #00ff66;
+
+            min-height: 300px;
+            padding: 15px;
+
+            border-radius: 8px;
+
+            font-family: monospace;
+
+            white-space: pre-wrap;
+
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>AbortController + Fetch</h2>
+
+        <div class="buttons">
+
+            <button id="fetchBtn">
+                Start Request
+            </button>
+
+            <button id="cancelBtn">
+                Cancel Request
+            </button>
+
+        </div>
+
+        <div id="log">
+            Click "Start Request" to begin.
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /*
+        ==========================================================
+        IMPORTANT IDEA
+        ==========================================================
+
+        We haven't actually cancelled anything yet.
+
+        Creating an AbortController does NOT cancel a request.
+
+        Passing controller.signal to fetch() does NOT cancel it.
+
+        To cancel:
+
+            controller.abort();
+
+        Example:
+
+            const controller = new AbortController();
+
+            fetch("https://example.com/data", {
+                signal: controller.signal
+            });
+
+            controller.abort();
+
+        The Fetch request is aborted.
+        */
+
+
+        const fetchBtn = document.querySelector("#fetchBtn");
+        const cancelBtn = document.querySelector("#cancelBtn");
+        const log = document.querySelector("#log");
+
+
+        /*
+        Create an AbortController.
+
+        At this point, NOTHING has been cancelled.
+        */
+        let controller;
+
+
+        fetchBtn.addEventListener("click", () => {
+
+            /*
+            Create a NEW controller for this request.
+
+            This is important because once a controller
+            has been aborted, its signal stays aborted.
+            */
+            controller = new AbortController();
+
+
+            log.textContent =
+                "Request started...\n\n" +
+
+                "The request has NOT been cancelled yet.\n" +
+
+                "Click 'Cancel Request' to call:\n" +
+
+                "controller.abort();";
+
+
+            fetch(
+                "https://jsonplaceholder.typicode.com/users",
+                {
+                    /*
+                    Give the fetch request the controller's signal.
+
+                    This connects the request to the controller.
+
+                    It STILL does not cancel the request.
+                    */
+                    signal: controller.signal
+                }
+            )
+
+                .then(response => {
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            `HTTP Error: ${response.status}`
+                        );
+                    }
+
+
+                    log.textContent +=
+                        "\n\nServer responded successfully.";
+
+
+                    return response.json();
+                })
+
+                .then(data => {
+
+                    console.log("Users:", data);
+
+
+                    log.textContent +=
+                        `\nReceived ${data.length} users.\n\n`;
+
+
+                    log.textContent +=
+                        data
+                            .map(user =>
+                                `${user.name} - ${user.email}`
+                            )
+                            .join("\n");
+                })
+
+                .catch(error => {
+
+                    console.log("Error:", error);
+
+
+                    log.textContent +=
+                        `\n\nError name: ${error.name}`;
+
+                    log.textContent +=
+                        `\nError message: ${error.message}`;
+
+
+                    /*
+                    When controller.abort() cancels fetch(),
+    
+                    error.name will normally be:
+    
+                        "AbortError"
+                    */
+                    if (error.name === "AbortError") {
+
+                        log.textContent +=
+                            "\n\nThe Fetch request was aborted.";
+                    }
+                });
+
+        });
+
+
+        cancelBtn.addEventListener("click", () => {
+
+            /*
+            THIS is what actually cancels the request.
+
+                controller.abort();
+
+            */
+            if (controller) {
+
+                controller.abort();
+
+                log.textContent +=
+                    "\n\ncontroller.abort() was called.\n" +
+                    "The Fetch request is being aborted.";
+            }
+
+        });
+
+        /*
+            1. Create controller
+                    ↓
+                new AbortController()
+
+            2. Connect it to fetch
+                    ↓
+                signal: controller.signal
+
+            3. Actually cancel
+                    ↓
+                controller.abort()
+        */
+
+        /*
+            When we click Cancel Button
+            While fetch() is still running          ->      abort() cancels it → .catch() runs
+            After fetch() completed successfully    ->      Click listener runs → abort() has nothing to cancel → .catch() does not run
+        */
+
+
+        /*
+            Why this is useful?
+            - User types:
+                lap
+                  ↓
+                Request A starts
+
+                lapt
+                  ↓
+                Request B starts
+
+                laptop
+                  ↓
+                Request C starts
+
+            - Without cancellation, all three requests might continue.
+            - But perhaps the user only cares about the latest search.
+            - We could cancel the previous request when a new search begins:
+                New search
+                    ↓
+                Abort previous request
+                    ↓
+                Start new request
+        */
+
+
+        /*
+            *Notice that we create a new controller for each request: controller = new AbortController();
+
+            Why?
+            - Because once we abort a controller, its signal is aborted.
+            - So we shouldn't normally try to reuse an already-aborted controller for a new request.
+
+            Example:
+                * For a Request
+
+                Request A
+                    ↓
+                Controller A
+                    ↓
+                abort()
+
+                * For another request
+
+                Request B
+                    ↓
+                Controller B
+        */
+
+    </script>
+
+</body>
+
+</html>
