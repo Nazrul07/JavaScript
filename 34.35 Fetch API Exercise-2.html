@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fetch API Practice</title>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #eef2f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            width: 760px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .buttons button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #log {
+            margin-top: 20px;
+            background: #222;
+            color: #00ff66;
+            min-height: 180px;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h2>User Dashboard</h2>
+        <div id="buttons">
+            <button id="fetchUsers">Fetch Users</button>
+            <button id="cancleFatch">Cancel Fetch</button>
+        </div>
+        <div id="log">Nothing to display.</div>
+    </div>
+
+    <script>
+        const log = document.querySelector("#log");
+        const fetchUsers = document.querySelector("#fetchUsers");
+        const cancleFatch = document.querySelector("#cancleFatch");
+
+        let controller = null;
+        let isFetching = false;
+
+        fetchUsers.addEventListener("click", () => {
+
+            // If a fetch request is already in progress, we don't want to start another one.
+            if (isFetching) {
+                log.textContent = "A fetch request is already in progress. Please wait or cancel the current request.";
+                return;
+            }
+
+            // Create a fresh controller for each new request.
+            controller = new AbortController();
+            isFetching = true;
+
+            log.textContent = "Fatching users...";
+
+            fetch("https://jsonplaceholder.typicode.com/users", {
+                signal: controller.signal
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    return response.json();
+                })
+
+                .then(users => {
+                    const output = users.map(user => {
+                        `Name: ${user.name} Email: ${user.email}`
+                    }).join("\n\n");
+
+                    log.textContent = `Users fetched successfully:\n\n${output}`;
+                })
+
+                .catch(error => {
+                    if (error.name === 'AbortError') {
+                        log.textContent = "Fetch request was canceled.";
+                        return;
+                    }
+
+                    log.textContent = `Error fetching users: ${error.message}`;
+                })
+
+                .finally(() => {
+                    isFetching = false;
+                    controller = null;
+                    log.textContent += "\nRequest finished.";
+                })
+        })
+
+        cancleFatch.addEventListener("click", () => {
+            if (isFetching && controller) {
+                controller.abort();
+            } else {
+                log.textContent = "No fetch request to cancel.";
+            }
+        });
+
+    </script>
+</body>
+
+</html>
