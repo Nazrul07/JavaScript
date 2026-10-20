@@ -48,7 +48,7 @@
 - [x] **Step 1.1:** The JavaScript Runtime Internals: V8 Call Stack, Memory Heap, Macrotasks vs Microtasks (`queueMicrotask`), and Event Loop Execution Order.
   - *Completed in:* [35.01 Event Loop and Concurrency Model.js](file:///D:/JavaScript/35.01%20Event%20Loop%20and%20Concurrency%20Model.js)
 - [x] **Step 1.2:** Promises from Scratch: Promises/A+ mental model, `.then()` chaining, catch boundaries, and modern combinators (`Promise.all`, `Promise.allSettled`, `Promise.race`, `Promise.any`).
-  - *Completed in:* [35.02.01 Promise Basics.js](file:///D:/JavaScript/35.02.01%20Promise%20Basics.js), [35.02.02 Promise Chaining.js](file:///D:/JavaScript/35.02.02%20Promise%20Chaining.js), [35.02.03 Promise Combinators.js](file:///D:/JavaScript/35.02.03%20Promise%20Combinators.js)
+  - *Completed in:* [35.02.01 Promise Basics.js](file:///D:/JavaScript/35.02.01%20Promise%20Basics.js), [35.02.02 Promise Chaining.js](file:///D:/JavaScript/35.02.02%20Promise%20Chaining.js), [35.02.03 Promise Combinators.js](file:///D:/JavaScript/35.02.03%20Promise%20Combinators.js), [35.02.04 Understanding Resolve and Reject.js](file:///D:/JavaScript/35.02.04%20Understanding%20Resolve%20and%20Reject.js)
 - [ ] **Step 1.3:** `async` / `await` Under the Hood: Generator-based co-routine foundation, parallel execution vs sequential waterfalls, and proper error boundaries.
 - [ ] **Step 1.4:** Advanced Cancellation & Abort Signals: Modern `AbortController`, `AbortSignal.timeout()`, and cleanup patterns.
 - [ ] **Milestone Task 1:** Concurrent Request Pool with Retry & Timeout Engine.

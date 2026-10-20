@@ -21,4 +21,10 @@ This topic is broken into 3 clean, dedicated files:
    - Promise.race()      (First to settle wins)
    - Promise.any()       (First success wins)
    - Promise.allSettled()(Waits for all, never fails)
+
+4. [35.02.04 Understanding Resolve and Reject.js]
+   - What is resolve and where does it come from?
+   - The restaurant buzzer analogy
+   - Success path (resolve) vs Failure path (reject)
+   - What happens if resolve is never called?
 */
