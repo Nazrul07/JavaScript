@@ -1,0 +1,13 @@
+# Personal career roadmap & planning
+Path_1_Full_Stack_Web_Engineer.docx
+*.docx
+
+# Mentor tracking & personal notes
+agent.md
+AGENT.md
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
